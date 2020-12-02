@@ -10,8 +10,9 @@ from scipy.sparse import eye
 from scipy.sparse import spdiags
 
 def diffmat(n, m):
-    if (m>0):
-        D = spdiags([j for j in range(n)], 1, n, n)
+    if (m==1):
+        diag = [j for j in range(n)]
+        D = spdiags(diag, 1, n, n)
     else:
         D = eye(n)
     return D

@@ -10,8 +10,9 @@ import numpy as np
 
 def coeffs2vals(coeffs):
     n = len(coeffs)
-    coeffs[1:n-2] = 1/2*coeffs[1:n-2]
-    tmp = np.concatenate((coeffs, coeffs[-2:0:-1]))
+    coeffs2 = coeffs.copy()
+    coeffs2[1:n-2] = 1/2*coeffs2[1:n-2]
+    tmp = np.concatenate((coeffs2, coeffs2[-2:0:-1]))
     values = np.fft.fft(tmp)
     values = np.real(values[n-1::-1])
     return values
