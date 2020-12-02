@@ -6,7 +6,12 @@ Created on Wed Dec  2 11:29:07 2020
 Copyright 2020 by Hadrien Montanelli.
 """
 # Standard library imports:
-import numpy as np
+from scipy.sparse import eye
+from scipy.sparse import spdiags
 
 def diffmat(n, m):
-    return 0
+    if (m>0):
+        D = spdiags([j for j in range(n)], 1, n, n)
+    else:
+        D = eye(n)
+    return D
