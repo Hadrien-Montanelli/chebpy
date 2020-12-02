@@ -9,7 +9,7 @@ To install, you can either download a .zip file or clone the directory with Git.
 
 Download a .zip of learnpy from:
 
-- https://github.com/Hadrien-Montanelli/chebpy/archive/master.zip
+- https://github.com/Hadrien-Montanelli/chebpy/archive/main.zip
 
 ### Option 2: Clone with Git
 
