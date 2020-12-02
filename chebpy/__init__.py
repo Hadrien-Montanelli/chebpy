@@ -9,5 +9,7 @@ from .chebpoly import chebpoly
 from .chebpts import chebpts
 from .coeffs2vals import coeffs2vals
 from .diffmat import diffmat
+from .gensylv import gensylv
 from .vals2coeffs import vals2coeffs
 from .spconvert import spconvert
+from .sylv import sylv
