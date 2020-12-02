@@ -3,7 +3,7 @@
 """
 Created on Wed Dec  2 11:28:05 2020
 
-@author: montanelli
+Copyright 2020 by Hadrien Montanelli.
 """
 # Standard library imports:
 import numpy as np
