@@ -15,4 +15,11 @@ def spconvert(n, lam):
         diags[0, 0] = 1
         diags[1, :] = -diags[1, :]
         S = spdiags(diags, [0, 2], n, n)
+    else:
+        diags = np.zeros([2, n])
+        diags[0,:] = lam/(lam + np.arange(n))
+        diags[1,:] = lam/(lam + np.arange(n))
+        diags[0, 0] = 1
+        diags[1, :] = -diags[1, :]
+        S = spdiags(diags, [0, 2], n, n)
     return S
