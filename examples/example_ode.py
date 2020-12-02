@@ -28,7 +28,7 @@ uex = lambda x: np.sin(x) + c - np.sin(-1)
 
 # Assemble matrices:
 N = 20
-xx = chebpts(N)
+x = chebpts(N)
 D = diffmat(N, 1)
 S = spconvert(N, 0)
 L = D.copy()
@@ -39,7 +39,7 @@ L = np.roll(L, 1, axis=0)
 L = csr_matrix(L)
 
 # Assemble RHS:
-F = vals2coeffs(f(xx))
+F = vals2coeffs(f(x))
 F = S*F
 F = np.roll(F, 1)
 F[0] = c
@@ -50,9 +50,9 @@ U = spsolve(L, F)
 
 # Plot and compute error:
 u = coeffs2vals(U)
-plt.plot(xx, u, '.-')
-plt.plot(xx, uex(xx))
-error = u - uex(xx)
+plt.plot(x, u, '.-')
+plt.plot(x, uex(x))
+error = u - uex(x)
 print('Error:', np.max(np.abs(error)))
 
 # %% Solve u''(x) = f(x) on [-1,1] with u(-1) = c1 and u(1) = c2.
@@ -67,7 +67,7 @@ uex = lambda x: -np.cos(x) + 1/2*(c2 - c1)*x + 1/2*(c1 + c2) + np.cos(1)
 
 # Assemble matrices:
 N = 20
-xx = chebpts(N)
+x = chebpts(N)
 D = diffmat(N, 2)
 S0 = spconvert(N, 0)
 S1 = spconvert(N, 1)
@@ -80,7 +80,7 @@ L = np.roll(L, 2, axis=0)
 L = csr_matrix(L)
 
 # Assemble RHS:
-F = vals2coeffs(f(xx))
+F = vals2coeffs(f(x))
 F = S1*S0*F
 F = np.roll(F, 2)
 F[0] = c1
@@ -92,7 +92,7 @@ U = spsolve(L, F)
 
 # Plot and compute error:
 u = coeffs2vals(U)
-plt.plot(xx, u, '.-')
-plt.plot(xx, uex(xx))
-error = u - uex(xx)
+plt.plot(x, u, '.-')
+plt.plot(x, uex(x))
+error = u - uex(x)
 print('Error:', np.max(np.abs(error)))

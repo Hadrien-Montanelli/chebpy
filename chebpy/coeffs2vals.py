@@ -13,6 +13,6 @@ def coeffs2vals(coeffs):
     coeffs2 = coeffs.copy()
     coeffs2[1:n-2] = 1/2*coeffs2[1:n-2]
     tmp = np.concatenate((coeffs2, coeffs2[-2:0:-1]))
-    values = np.fft.fft(tmp)
+    values = np.fft.fft(tmp, axis=0)
     values = np.real(values[n-1::-1])
     return values
