@@ -13,16 +13,17 @@ from scipy.linalg import schur
 def sylv(A, B, C):
     
     # Compute the Schur decomposotions:
-    R, U = schur(A)
-    S, V = schur(B)
+    R, U = schur(A) # R, U, A are m x m
+    S, V = schur(B) # S, V, B are n x n
 
     # Assemble D:
-    D = U.T @ C @ V
+    D = U.T @ C @ V # C, D are m x n
     
     # Solve RY - YS = D for Y:
-    n = len(A)
-    Y = np.zeros([n, n])
-    I = np.eye(n)
+    m = len(A)
+    n = len(B)
+    Y = np.zeros([m, n]) # Y is m x n
+    I = np.eye(m)
     for j in range(n):
         LHS = R - S[j, j]*I
         RHS = D[:, j]
