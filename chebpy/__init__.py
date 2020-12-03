@@ -12,4 +12,3 @@ from .diffmat import diffmat
 from .gensylv import gensylv
 from .vals2coeffs import vals2coeffs
 from .spconvert import spconvert
-from .sylv import sylv
