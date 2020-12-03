@@ -21,16 +21,25 @@ from chebpy import diffmat, gensylv, spconvert
 # %% Solve u_xx + u_yy = f on [-1,1]x[-1,1] with Dirichlet boundary conditions.
 
 # RHS:
-f = lambda x,y: -8*pi**2*np.sin(2*pi*x)*np.sin(2*pi*y)
+f = lambda x,y: 8*pi**2*np.sin(2*pi*x)*np.sin(2*pi*y)
+# f = lambda x,y: 0*x + 0*y
 
 # Boundary condtions:
 g1 = lambda y: 0*y # u(-1, y) = g1(y)
 g2 = lambda y: 0*y # u(+1, y) = g2(y)
 h1 = lambda x: 0*x # u(x, -1) = h1(x)
 h2 = lambda x: 0*x # u(x, +1) = h2(x)
+# g1 = lambda y: 1 + 0*y # u(-1, y) = g1(y)
+# g2 = lambda y: 1 + 0*y # u(+1, y) = g2(y)
+# h1 = lambda x: 1 + 0*x # u(x, -1) = h1(x)
+# h2 = lambda x: 1 + 0*x # u(x, +1) = h2(x)
+
+# Exact solution:
+uex = lambda x,y: np.sin(2*pi*x)*np.sin(2*pi*y)
+# uex = lambda x,y: 1 + 0*x + 0*y
 
 # Assemble differentiation matrices:
-N = 40
+N = 100
 x = chebpts(N)
 y = chebpts(N)
 X, Y = np.meshgrid(x, y)
@@ -65,6 +74,8 @@ F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
 S0 = spconvert(N, 0)
 S1 = spconvert(N, 1)
 F = (S1 @ S0) @ F @ (S1 @ S0).T
+# A1 = (S1 @ S0) @ A1
+# C2 = (S1 @ S0) @ C2
 
 # Assemble matrices for the the generalized Sylvester equation:
 Ft = F - A1[:N, :2] @ H @ C1.T - (A1 - A1[:N, :2] @ By) @ G.T @ C1[:N, :2].T
@@ -75,17 +86,22 @@ C1t = C1 - C1[:N, :2] @ Bx
 C2t = C2 - C2[:N, :2] @ Bx
 
 # Solve the generalized Sylvester equation:
+# print(A1t)
+# print(A2t)
+# print(C1t)
+# print(C2t)
 A1t = A1t[2:, 2:]
 A2t = A2t[:N-2, 2:]
 C1t = C1t[:N-2, 2:]
 C2t = C2t[2:, 2:]
 Ft = Ft[:N-2, :N-2]
-U22 = gensylv(A1t, C1t.T, A2t, C2t.T, Ft)
+# Ft = Ft[2:, 2:]
+U22 = gensylv(A1t, C1t, A2t, C2t, Ft)
 
 # Assemble solution:
 U12 = H[:, 2:] - By[:, 2:] @ U22
 U21 = G[:, 2:].T - U22 @ Bx[:, 2:].T
-U11 = H[:, 0:2] - By[:, 2:] @ U21
+U11 = H[:, :2] - By[:, 2:] @ U21
 U1 = np.concatenate((U11, U12), axis=1)
 U2 = np.concatenate((U21, U22), axis=1)
 U = np.concatenate((U1, U2), axis=0)
@@ -98,12 +114,11 @@ surf = ax.plot_surface(X, Y, u, cmap=cm.coolwarm, linewidth=0)
 fig.colorbar(surf, shrink=0.5)
 
 # Plot exact solution:
-uex = lambda x,y: np.sin(2*pi*x)*np.sin(2*pi*y)
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 surf = ax.plot_surface(X, Y, uex(X, Y), cmap=cm.coolwarm, linewidth=0)
 fig.colorbar(surf, shrink=0.5)
 
 # Error:
-error = np.linalg.norm(uex(X,Y) - u)
+error = np.max(np.abs(uex(X,Y) - u))/np.max(np.abs(uex(X,Y)))
 print('Error:', error)
