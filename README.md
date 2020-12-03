@@ -7,13 +7,13 @@ To install, you can either download a .zip file or clone the directory with Git.
 
 ### Option 1: Download a .zip file
 
-Download a .zip of learnpy from:
+Download a .zip of chebpy from:
 
 - https://github.com/Hadrien-Montanelli/chebpy/archive/main.zip
 
 ### Option 2: Clone with Git
 
-To clone the learnpy repository, first navigate in a terminal to where you want the repository cloned, then type:
+To clone the chebpy repository, first navigate in a terminal to where you want the repository cloned, then type:
 ```
 git clone https://github.com/Hadrien-Montanelli/chebpy.git
 ```
