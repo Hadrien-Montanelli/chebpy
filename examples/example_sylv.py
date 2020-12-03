@@ -26,16 +26,17 @@ X = sylv(A, B, C)
 error = np.linalg.norm(A @ X - X @ B - C)
 print('Error:', error)
 
-# %% Solve generalized Sylvester equation A1XB1 - A2XB2 = C.
+# %% Solve generalized Sylvester equation AXB^T + CXD^T = E.
 
+#np.random.seed(2)
 m = 5
-n = 5
-A1 = np.ones([m, m]) + np.random.randn(m, m)
-B1 = np.eye(n) + 3*np.ones([n, n])
-A2 = 3*np.ones([m, m]) + np.random.randn(m, m)
-B2 = 2*np.eye(n) + np.ones([n, n])
-C = np.random.randn(m, n)
+n = 6
+A = 4*np.ones([m, m]) + np.random.randn(m, m)
+B = 2*np.eye(n) + np.random.randn(n, n)
+C = 3*np.eye(m) + np.random.randn(m, m)
+D = 5*np.eye(n) + np.random.randn(n, n)
+E = np.random.randn(m, n)
 
-X = gensylv(A1, B1, A2, B2, C)
-error = np.linalg.norm(A1 @ X @ B1 - A2 @ X @ B2 - C)
+X = gensylv(A, B, C, D, E)
+error = np.linalg.norm(A @ X @ B.T + C @ X @ D.T - E)
 print('Error:', error)

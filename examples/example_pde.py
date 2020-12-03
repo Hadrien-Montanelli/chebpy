@@ -23,7 +23,7 @@ from chebpy import diffmat, gensylv
 f = lambda x,y: np.exp(-100*(x + y)**2)
 
 # Assemble differentiation matrices:
-N = 10
+N = 3
 x = chebpts(N)
 y = chebpts(N)
 X, Y = np.meshgrid(x, y)
@@ -63,7 +63,7 @@ print(C1t.T)
 print(C2t.T)
 
 # Solve the generalized Sylvester equation and assemble solution:
-# U22 = gensylv(A1t, C1t, A2t, C2t, Ft)
+# U22 = gensylv(A1t, C1t.T, A2t, C2t.T, Ft)
 # U22 = U22[2:, 2:]
 # U12 = H[:, 2:] - By[:, 2:] @ U22
 # U21 = G[:, 2:].T - U22 @ Bx[:, 2:].T

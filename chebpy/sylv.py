@@ -32,6 +32,6 @@ def sylv(A, B, C):
         Y[:, j] = solve(LHS, RHS)
     
     # Assemble solution:
-    X =  U @ Y @ V.T
+    X =  U @ Y @ V.T # X is m x n
     
     return X
