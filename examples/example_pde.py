@@ -90,7 +90,7 @@ U1 = np.concatenate((U11, U12), axis=1)
 U2 = np.concatenate((U21, U22), axis=1)
 U = np.concatenate((U1, U2), axis=0)
 
-# Plot solution:
+# Plot numerical solution:
 u = coeffs2vals(coeffs2vals(U).T).T
 fig = plt.figure()
 ax = fig.gca(projection='3d')

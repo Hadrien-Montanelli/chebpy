@@ -53,7 +53,7 @@ u = coeffs2vals(U)
 plt.plot(x, u, '.-')
 plt.plot(x, uex(x))
 error = u - uex(x)
-print('Error:', np.max(np.abs(error)))
+print('Error: (1st-order)', np.max(np.abs(error)))
 
 # %% Solve u''(x) = f(x) on [-1,1] with u(-1) = c1 and u(1) = c2.
 
@@ -95,4 +95,4 @@ u = coeffs2vals(U)
 plt.plot(x, u, '.-')
 plt.plot(x, uex(x))
 error = u - uex(x)
-print('Error:', np.max(np.abs(error)))
+print('Error: (2nd-order)', np.max(np.abs(error)))

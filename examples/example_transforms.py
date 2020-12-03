@@ -13,15 +13,15 @@ import numpy as np
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, vals2coeffs
 
-# %% Approximation (1D):    
-f = lambda x: np.exp(np.sin(x)**2)
+# %% Transforms (1D):    
+f = lambda x: np.exp(-10*x**2)
 N = 100
 x = chebpts(N)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
-print('Error (approx):', np.max(np.abs(error)))
+print('Error (1D):', np.max(np.abs(error)))
 
-# %% Approximation (2D):
-f = lambda x,y: np.exp(-10*(x + y)**2)
+# %% Transforms (2D):
+f = lambda x,y: np.exp(-10*(x**2 + y**2))
 N = 100
 x = chebpts(N)
 y = chebpts(N)
@@ -30,4 +30,4 @@ values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
 values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
-print('Error (approx):', np.max(np.abs(error)))
+print('Error (2D):', np.max(np.abs(error)))
