@@ -34,26 +34,26 @@ h2 = lambda x: 0*x # u(x, +1) = h2(x)
 uex = lambda x,y: np.sin(w*x)*np.sin(w*y)
 
 # Grid points:
-N = 100
-x = chebpts(N)
-y = chebpts(N)
+n = 100
+x = chebpts(n)
+y = chebpts(n)
 X, Y = np.meshgrid(x, y)
 
 # Assemble differentiation matrices:
-S0 = spconvert(N, 0)
-S1 = spconvert(N, 1)
-A1 = S1 @ S0 @ np.eye(N)
-C1 = np.array(csr_matrix.todense(diffmat(N, 2))) + S1 @ S0 @ np.eye(N)
-A2 = np.array(csr_matrix.todense(diffmat(N, 2))) 
-C2 = S1 @ S0 @ np.eye(N)
+S0 = spconvert(n, 0)
+S1 = spconvert(n, 1)
+A1 = S1 @ S0 @ np.eye(n)
+C1 = np.array(csr_matrix.todense(diffmat(n, 2))) + S1 @ S0 @ np.eye(n)
+A2 = np.array(csr_matrix.todense(diffmat(n, 2))) 
+C2 = S1 @ S0 @ np.eye(n)
 
 # Assemble boundary conditions:
-Bx = np.zeros([2, N])
-By = np.zeros([2, N])
-G = np.zeros([2, N])
-H = np.zeros([2, N])
-for k in range(N):
-    T = np.zeros(N)
+Bx = np.zeros([2, n])
+By = np.zeros([2, n])
+G = np.zeros([2, n])
+H = np.zeros([2, n])
+for k in range(n):
+    T = np.zeros(n)
     T[k] = 1
     Bx[0, k] = feval(T, -1)
     By[0, k] = feval(T, -1)
@@ -75,19 +75,19 @@ F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
 F = (S1 @ S0) @ F @ (S1 @ S0).T
 
 # Assemble matrices for the generalized Sylvester equation:
-Ft = F - A1[:N, :2] @ H @ C1.T - (A1 - A1[:N, :2] @ By) @ G.T @ C1[:N, :2].T
-Ft = Ft - A2[:N, :2] @ H @ C2.T - (A2 - A2[:N, :2] @ By) @ G.T @ C2[:N, :2].T
-A1t = A1 - A1[:N, :2] @ By
-A2t = A2 - A2[:N, :2] @ By
-C1t = C1 - C1[:N, :2] @ Bx
-C2t = C2 - C2[:N, :2] @ Bx
+Ft = F - A1[:n, :2] @ H @ C1.T - (A1 - A1[:n, :2] @ By) @ G.T @ C1[:n, :2].T
+Ft = Ft - A2[:n, :2] @ H @ C2.T - (A2 - A2[:n, :2] @ By) @ G.T @ C2[:n, :2].T
+A1t = A1 - A1[:n, :2] @ By
+A2t = A2 - A2[:n, :2] @ By
+C1t = C1 - C1[:n, :2] @ Bx
+C2t = C2 - C2[:n, :2] @ Bx
 
 # Solve the generalized Sylvester equation:
-A1t = A1t[:N-2, 2:] 
-C1t = C1t[:N-2, 2:] 
-A2t = A2t[:N-2, 2:]
-C2t = C2t[:N-2:, 2:]
-Ft = Ft[:N-2, :N-2]
+A1t = A1t[:n-2, 2:] 
+C1t = C1t[:n-2, 2:] 
+A2t = A2t[:n-2, 2:]
+C2t = C2t[:n-2:, 2:]
+Ft = Ft[:n-2, :n-2]
 U22 = gensylv(A1t, C1t, A2t, C2t, Ft)
 
 # Assemble solution:

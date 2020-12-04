@@ -22,8 +22,8 @@ from chebpy import diffmat, multmat, spconvert
     
 # Scaled Airy functions:
 eps = 1e-4
-N = 1000
-x = chebpts(N)
+n = 1000
+x = chebpts(n)
 ai, aip, bi, bip = airy(eps**(-1/3)*x)
     
 # Right-hand side f and boundary conditions c1 and c2:
@@ -35,13 +35,13 @@ c2 = ai[-1]
 uex = ai  
 
 # Assemble matrices:
-D = diffmat(N, 2)
-S0 = spconvert(N, 0)
-S1 = spconvert(N, 1)
-M = multmat(N, lambda x: -x)
+D = diffmat(n, 2)
+S0 = spconvert(n, 0)
+S1 = spconvert(n, 1)
+M = multmat(n, lambda x: -x)
 L = eps*np.array(csr_matrix.todense(D)) + S1 @ S0 @ M
-for k in range(N):
-    T = np.zeros(N)
+for k in range(n):
+    T = np.zeros(n)
     T[k] = 1
     L[-2, k] = feval(T, -1)
     L[-1, k] = feval(T, 1)
