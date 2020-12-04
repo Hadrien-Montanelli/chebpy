@@ -13,21 +13,24 @@ import numpy as np
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, vals2coeffs
 
-# %% Transforms (1D) on [-1,1]: 
+# %% Transforms (1D) on [-1,1].
+
 f = lambda x: np.exp(-10*x**2)
 n = 100
 x = chebpts(n)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
 print('Error (1D):', np.max(np.abs(error)))
 
-# %% Transforms (1D) on [0,2]: 
+# %% Transforms (1D) on [0,2].
+
 f = lambda x: np.exp(-10*x**2)
 n = 100
 x = chebpts(n, [0, 2])
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
 print('Error (1D):', np.max(np.abs(error)))
 
-# %% Transforms (2D) on [-1,1]x[-1,1]:
+# %% Transforms (2D) on [-1,1]x[-1,1].
+
 f = lambda x,y: np.exp(-10*(x**2 + y**2))
 n = 100
 x = chebpts(n)
@@ -39,7 +42,8 @@ values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
 print('Error (2D):', np.max(np.abs(error)))
 
-# %% Transforms (2D) on [0,2]x[-1,0]:
+# %% Transforms (2D) on [0,2]x[-1,0].
+
 f = lambda x,y: np.exp(-10*(x**2 + y**2))
 n = 100
 x = chebpts(n, [0, 2])

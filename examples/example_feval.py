@@ -13,7 +13,7 @@ import numpy as np
 # Chebpy imports:
 from chebpy import chebpts, feval, vals2coeffs
 
-# %% Evaluate f(x) = cos(x)*exp(-x^2):
+# %% Evaluate f(x) = cos(x)*exp(-x^2).
 
 # Function:
 f = lambda x: np.cos(x)*np.exp(-x**2)
