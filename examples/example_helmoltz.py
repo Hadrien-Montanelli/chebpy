@@ -15,13 +15,14 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 # Chebpy imports:
-from chebpy import chebpts, coeffs2vals, vals2coeffs
+from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
 from chebpy import diffmat, gensylv, spconvert
 
-# %% Solve u_xx + u_yy = f on [-1,1]x[-1,1] with Dirichlet boundary conditions.
+# %% Solve u_xx + u_yy + u = f on [-1,1]x[-1,1] with Dirichlet conditions.
 
 # RHS:
-f = lambda x,y: -2*(2*pi)**2*np.sin(2*pi*x)*np.sin(2*pi*y)
+w = 4*pi
+f = lambda x,y: (-2*w**2 + 1)*np.sin(w*x)*np.sin(w*y)
 
 # Boundary condtions:
 g1 = lambda y: 0*y # u(-1, y) = g1(y)
@@ -30,10 +31,10 @@ h1 = lambda x: 0*x # u(x, -1) = h1(x)
 h2 = lambda x: 0*x # u(x, +1) = h2(x)
 
 # Exact solution:
-uex = lambda x,y: np.sin(2*pi*x)*np.sin(2*pi*y)
+uex = lambda x,y: np.sin(w*x)*np.sin(w*y)
 
 # Grid points:
-N = 50
+N = 100
 x = chebpts(N)
 y = chebpts(N)
 X, Y = np.meshgrid(x, y)
@@ -42,8 +43,8 @@ X, Y = np.meshgrid(x, y)
 S0 = spconvert(N, 0)
 S1 = spconvert(N, 1)
 A1 = S1 @ S0 @ np.eye(N)
-C1 = np.array(csr_matrix.todense(diffmat(N, 2)))
-A2 = np.array(csr_matrix.todense(diffmat(N, 2)))
+C1 = np.array(csr_matrix.todense(diffmat(N, 2))) + S1 @ S0 @ np.eye(N)
+A2 = np.array(csr_matrix.todense(diffmat(N, 2))) 
 C2 = S1 @ S0 @ np.eye(N)
 
 # Assemble boundary conditions:
@@ -52,10 +53,12 @@ By = np.zeros([2, N])
 G = np.zeros([2, N])
 H = np.zeros([2, N])
 for k in range(N):
-    Bx[0, k] = (-1)**k
-    By[0, k] = (-1)**k
-Bx[1, :] = np.ones(N)
-By[1, :] = np.ones(N)   
+    T = np.zeros(N)
+    T[k] = 1
+    Bx[0, k] = feval(T, -1)
+    By[0, k] = feval(T, -1)
+    Bx[1, k] = feval(T, 1)
+    By[1, k] = feval(T, 1)
 G[0, :] = g1(y)
 G[1, :] = g2(y)
 H[0, :] = h1(x)
