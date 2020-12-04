@@ -16,12 +16,12 @@ from scipy.sparse import csr_matrix
 
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, vals2coeffs
-from chebpy import diffmat, spconvert
+from chebpy import diffmat, gensylv, spconvert
 
-# %% Solve u_yy = f on [-1,1]x[-1,1] with Dirichlet boundary conditions.
+# %% Solve u_xx + u_yy = f on [-1,1]x[-1,1] with Dirichlet boundary conditions.
 
 # RHS:
-f = lambda x,y: -(2*pi)**2*np.sin(2*pi*x)*np.sin(2*pi*y)
+f = lambda x,y: -2*(2*pi)**2*np.sin(2*pi*x)*np.sin(2*pi*y)
 
 # Boundary condtions:
 g1 = lambda y: 0*y # u(-1, y) = g1(y)
@@ -39,8 +39,12 @@ y = chebpts(N)
 X, Y = np.meshgrid(x, y)
 
 # Assemble differentiation matrices:
+S0 = spconvert(N, 0)
+S1 = spconvert(N, 1)
+A1 = S1 @ S0 @ np.eye(N)
+C1 = np.array(csr_matrix.todense(diffmat(N, 2)))
 A2 = np.array(csr_matrix.todense(diffmat(N, 2)))
-C2 = np.eye(N)
+C2 = S1 @ S0 @ np.eye(N)
 
 # Assemble boundary conditions:
 Bx = np.zeros([2, N])
@@ -65,20 +69,23 @@ H = np.linalg.inv(By_hat) @ H
 
 # # Assemble right-hand side:
 F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
-S0 = spconvert(N, 0)
-S1 = spconvert(N, 1)
-F = (S1 @ S0) @ F
+F = (S1 @ S0) @ F @ (S1 @ S0).T
 
-# Assemble matrices for the linear system:
-Ft = F - A2[:N, :2] @ H @ C2.T - (A2 - A2[:N, :2] @ By) @ G.T @ C2[:N, :2].T
+# Assemble matrices for the generalized Sylvester equation:
+Ft = F - A1[:N, :2] @ H @ C1.T - (A1 - A1[:N, :2] @ By) @ G.T @ C1[:N, :2].T
+Ft = Ft - A2[:N, :2] @ H @ C2.T - (A2 - A2[:N, :2] @ By) @ G.T @ C2[:N, :2].T
+A1t = A1 - A1[:N, :2] @ By
 A2t = A2 - A2[:N, :2] @ By
+C1t = C1 - C1[:N, :2] @ Bx
 C2t = C2 - C2[:N, :2] @ Bx
 
-# Solve the linear system:
-A2t = A2t[:N-2, 2:] # A12
-C2t = C2t[:N-2, 2:] # C21
-Ft = Ft[:N-2, :N-2] # F11 
-U22 = np.linalg.inv(A2t) @ Ft @ np.linalg.inv(C2t.T)
+# Solve the generalized Sylvester equation:
+A1t = A1t[:N-2, 2:] 
+C1t = C1t[:N-2, 2:] 
+A2t = A2t[:N-2, 2:]
+C2t = C2t[:N-2:, 2:]
+Ft = Ft[:N-2, :N-2]
+U22 = gensylv(A1t, C1t, A2t, C2t, Ft)
 
 # Assemble solution:
 U12 = H[:, 2:] - By[:, 2:] @ U22
@@ -93,6 +100,12 @@ u = coeffs2vals(coeffs2vals(U).T).T
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 surf = ax.plot_surface(X, Y, u, cmap=cm.coolwarm, linewidth=0)
+fig.colorbar(surf, shrink=0.5)
+
+# Plot exact solution:
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+surf = ax.plot_surface(X, Y, uex(X, Y), cmap=cm.coolwarm, linewidth=0)
 fig.colorbar(surf, shrink=0.5)
 
 # Error:
