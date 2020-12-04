@@ -105,7 +105,7 @@ N = 1000
 x = chebpts(N)
 ai, aip, bi, bip = airy(eps**(-1/3)*x)
     
-# Right-hand side f and boundary condition c1 and c2:
+# Right-hand side f and boundary conditions c1 and c2:
 f = lambda x: 0*x
 c1 = ai[0]
 c2 = ai[-1]

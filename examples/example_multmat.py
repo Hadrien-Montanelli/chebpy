@@ -39,5 +39,5 @@ G = M @ F
 g = coeffs2vals(G)
 
 # Error:
-error = g - gex(x)
-print('Error:', np.max(np.abs(error)))
+error = np.max(np.abs(g - gex(x)))/np.max(np.abs(gex(x)))
+print('Error:', error)

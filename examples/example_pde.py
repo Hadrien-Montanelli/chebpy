@@ -109,5 +109,5 @@ surf = ax.plot_surface(X, Y, uex(X, Y), cmap=cm.coolwarm, linewidth=0)
 fig.colorbar(surf, shrink=0.5)
 
 # Error:
-error = np.max(np.abs(uex(X,Y) - u))/np.max(np.abs(uex(X,Y)))
+error = np.max(np.abs(uex(X,Y) - u))/np.max(np.abs(uex(X, Y)))
 print('Error:', error)
