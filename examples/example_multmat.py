@@ -77,11 +77,11 @@ lam = 3
 
 # Functions:
 f = lambda x: np.cos(x)*np.cos(2*x)
-h = lambda x: np.sin(x)*x**2
+h = lambda x: np.sin(x)*x**10
 gex = lambda x: f(x)*h(x)
 
 # Grid:
-n = 20
+n = 100
 x = chebpts(n)
 
 # Compute coeffs of f and convert to the C^{(lam)} basis:
@@ -92,6 +92,7 @@ for k in range(lam):
     
 # Multiplication by h matrix in in the C^{(lam)} basis:
 M = multmat(n, h, [-1, 1], lam)
+spy(M)
 
 # Multiply in the C^{(lam)} basis:
 G = M @ F

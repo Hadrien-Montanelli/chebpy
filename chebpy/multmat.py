@@ -69,4 +69,6 @@ def multmat(n, f, dom=[-1, 1], lam=0):
             M1 = M2
             if (np.abs(F[k+2:]).all() < 1e-15):
                 break
+        M = csr_matrix(np.round(M, 15))    
+            
     return M
