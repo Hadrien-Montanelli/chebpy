@@ -11,7 +11,7 @@ from scipy.linalg import qz
 from scipy.linalg import solve
 
 def gensylv(A, B, C, D, E):
-    
+    """Solve the generalized Sylvester equation AXB^T + CXD^T = E."""
     # Compute the QZ decompositions:
     AA, CC, Q1, Z1 = qz(A, C) # Q1, Z1, A, C are m x m
     DD, BB, Q2, Z2 = qz(D, B) # Q2, Z2, A, C are n x n

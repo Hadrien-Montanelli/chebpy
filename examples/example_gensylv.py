@@ -16,13 +16,13 @@ from chebpy import gensylv
 # %% Solve generalized Sylvester equation AXB^T + CXD^T = E.
 
 # Get some matrices:
-m = 20
-n = 20
-A = 4*np.ones([m, m]) + np.random.randn(m, m)
-B = 2*np.eye(n) + np.random.randn(n, n)
-C = 3*np.eye(m) + np.random.randn(m, m)
-D = 5*np.eye(n) + np.random.randn(n, n)
-E = np.random.randn(m, n)
+m = 85
+n = 100
+A = 4*np.eye(m) + 0.1*np.random.randn(m, m)
+B = 2*np.eye(n) + 0.1*np.random.randn(n, n)
+C = 3*np.eye(m) + 0.1*np.random.randn(m, m)
+D = 5*np.eye(n) + 0.1*np.random.randn(n, n)
+E = 0.1*np.random.randn(m, n)
 
 # Solve and compute error:
 X = gensylv(A, B, C, D, E)
