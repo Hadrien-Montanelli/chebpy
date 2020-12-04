@@ -8,8 +8,8 @@ Copyright 2020 by Hadrien Montanelli.
 # Standard library imports:
 import numpy as np
 
-def chebpts(n, a=-1, b=1):
+def chebpts(n, dom=[-1, 1]):
     """Return n Chebyshev points of the second kind."""
     x = -np.cos(np.array([j for j in range(n)])*np.pi/(n-1))
-    x = b*(x + 1)/2 + a*(1 - x)/2
+    x = dom[1]*(x + 1)/2 + dom[0]*(1 - x)/2
     return x

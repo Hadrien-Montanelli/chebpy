@@ -14,7 +14,7 @@ import numpy as np
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, multmat, vals2coeffs
 
-# %% Multiplication g = f*h:
+# %% Multiplication g = f*h on [-1,1]:
 
 # Functions:
 f = lambda x: np.cos(x)*np.exp(x)
@@ -30,6 +30,34 @@ F = vals2coeffs(f(x))
 
 # Multiplication by h matrix in coefficient space:
 M = multmat(n, h)
+spy(M)
+
+# Multiply:
+G = M @ F
+
+# Convert to value space:
+g = coeffs2vals(G)
+
+# Error:
+error = np.max(np.abs(g - gex(x)))/np.max(np.abs(gex(x)))
+print('Error:', error)
+
+# %% Multiplication g = f*h on [0,2]:
+
+# Functions:
+f = lambda x: np.cos(x)*np.exp(x)
+h = lambda x: np.sin(x)*x**2
+gex = lambda x: f(x)*h(x)
+
+# Grid:
+n = 50
+x = chebpts(n, [0, 2])
+
+# Compute coeffs of f:
+F = vals2coeffs(f(x))
+
+# Multiplication by h matrix in coefficient space:
+M = multmat(n, h, [0, 2])
 spy(M)
 
 # Multiply:
