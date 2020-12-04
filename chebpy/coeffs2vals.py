@@ -9,6 +9,7 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 def coeffs2vals(coeffs):
+    """Convert values at Chebyshev points to Chebyshev coefficients."""
     n = len(coeffs)
     coeffs2 = coeffs.copy()
     coeffs2[1:n-2] = 1/2*coeffs2[1:n-2]

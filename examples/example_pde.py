@@ -67,7 +67,7 @@ By_hat = By[0:2, 0:2]
 By = np.linalg.inv(By_hat) @ By
 H = np.linalg.inv(By_hat) @ H
 
-# # Assemble right-hand side:
+# Assemble right-hand side:
 F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
 F = (S1 @ S0) @ F @ (S1 @ S0).T
 

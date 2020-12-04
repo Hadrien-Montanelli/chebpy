@@ -9,5 +9,6 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 def chebpts(n):
+    """Return n Chebyshev points of the second kind."""
     x = -np.cos(np.array([j for j in range(n)])*np.pi/(n-1))
     return x

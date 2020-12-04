@@ -10,6 +10,7 @@ import numpy as np
 from scipy.sparse import spdiags
 
 def spconvert(n, lam):
+    """Return the n x n C^{(lam)} to C^{(lam+1)} conversion matrix."""
     if (lam==0):
         diags = .5*np.ones([2, n])
         diags[0, 0] = 1

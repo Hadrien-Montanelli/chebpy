@@ -6,6 +6,7 @@ Created on Wed Dec  2 11:26:59 2020
 Copyright 2020 by Hadrien Montanelli.
 """
 def chebpoly(n):
+    """Return the degree n Chebyshev polynomial of the first kind."""
     if (n==0):
         T = lambda x: 1 + 0*x
     elif (n==1):
