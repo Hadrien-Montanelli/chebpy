@@ -78,9 +78,6 @@ C2t = C2 - C2[:N, :2] @ Bx
 A2t = A2t[:N-2, 2:] # A12
 C2t = C2t[:N-2, 2:] # C21
 Ft = Ft[:N-2, :N-2] # F11 
-# A2t = A2t[2:, 2:]   # A22
-# C2t = C2t[:N-2, 2:] # C21
-# Ft = Ft[2:, :N-2]   # F21 
 U22 = np.linalg.inv(A2t) @ Ft @ np.linalg.inv(C2t.T)
 
 # Assemble solution:
