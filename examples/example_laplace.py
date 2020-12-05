@@ -18,7 +18,7 @@ import time
 from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
 from chebpy import diffmat, gensylv, spconvert
 
-# %% Solve u_xx + u_yy = f on [-1,1]x[-1,1] with Dirichlet conditions.
+# %% Solve u_xx + u_yy = f on [-1,1]x[-1,1], Dirichlet conditions.
 
 # RHS:
 w = 21.2
@@ -115,5 +115,5 @@ plt.contourf(X, Y, uex(X, Y), 40, cmap=cm.coolwarm)
 plt.colorbar()
 
 # Error:
-error = np.max(np.abs(uex(X,Y) - u))/np.max(np.abs(uex(X, Y)))
+error = np.max(np.abs(uex(X, Y) - u))/np.max(np.abs(uex(X, Y)))
 print(f'Error (L-inf): {error:.2e}')

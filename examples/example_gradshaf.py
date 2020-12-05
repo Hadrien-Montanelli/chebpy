@@ -16,38 +16,55 @@ import time
 
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
-from chebpy import diffmat, gensylv, spconvert
+from chebpy import diffmat, gensylv, multmat, spconvert
 
-# %% Solve u_xx + u_yy + K^2*u = 0 on [-1,1]x[-1,1], Dirichlet conditions.
+# %% Solve r*u_rr - u_r + r*u_zz = f on [ra,rb]x[za,zb], Dirichlet conditions.
+
+# Domain:
+ra = 0.5
+rb = 1.5
+za = -0.6
+zb = 0.6
+r0 = ra
+r1 = rb
+z0 = za
+z1 = zb
 
 # RHS:
-f = lambda x, y: 0*x + 0*y
+f0 = 1
+R0 = 1.1
+a = 0.5
+f = lambda r, z: -f0*r**3 - f0*R0**2*r
 
 # Exact solution:
-w = 14.1
-K = np.sqrt(2)*w
-uex = lambda x, y: np.sin(w*x)*np.sin(w*y)
-
+scl = f0*a**2*R0**2/2
+uex = lambda r, z: scl*(1 - z**2/a**2 -((r-R0)/a + (r-R0)**2/(2*a*R0))**2)
+    
 # Boundary condtions:
-g1 = lambda y: uex(-1, y) # u(-1, y) = g1(y)
-g2 = lambda y: uex(+1, y) # u(+1, y) = g2(y)
-h1 = lambda x: uex(x, -1) # u(x, -1) = h1(x)
-h2 = lambda x: uex(x, +1) # u(x, +1) = h2(x)
+g1 = lambda z: uex(r0, z) # u(r0, z) = g1(z)
+g2 = lambda z: uex(r1, z) # u(r1, z) = g2(z)
+h1 = lambda r: uex(r, z0) # u(r, z0) = h1(r)
+h2 = lambda r: uex(r, z1) # u(r, z1) = h2(r)
 
 # Grid points:
 n = 100
-x = chebpts(n)
-y = chebpts(n)
-X, Y = np.meshgrid(x, y)
+r = chebpts(n, [ra, rb])
+z = chebpts(n, [za, zb])
+R, Z = np.meshgrid(r, z)
 
 # Assemble differentiation matrices:
 start = time.time()
-S0 = spconvert(n, 0)
-S1 = spconvert(n, 1)
+S0 = np.array(csr_matrix.todense(spconvert(n, 0)))
+S1 = np.array(csr_matrix.todense(spconvert(n, 1)))
+D1r = np.array(csr_matrix.todense(diffmat(n, 1, [ra, rb])))
+D2r = np.array(csr_matrix.todense(diffmat(n, 2, [ra, rb])))
+D2z = np.array(csr_matrix.todense(diffmat(n, 2, [za, zb])))
+M0 = multmat(n, lambda r: r, [ra, rb], 0)
+M2 = multmat(n, lambda r: r, [ra, rb], 2)
 A1 = S1 @ S0 @ np.eye(n)
-C1 = np.array(csr_matrix.todense(diffmat(n, 2))) + S1 @ S0 @ (K**2*np.eye(n))
-A2 = np.array(csr_matrix.todense(diffmat(n, 2))) 
-C2 = S1 @ S0 @ np.eye(n)
+C1 = M2 @ D2r - S1 @ D1r
+A2 = D2z
+C2 = S1 @ S0 @ M0
 
 # Assemble boundary conditions:
 Bx = np.zeros([2, n])
@@ -57,14 +74,14 @@ H = np.zeros([2, n])
 for k in range(n):
     T = np.zeros(n)
     T[k] = 1
-    Bx[0, k] = feval(T, -1)
-    By[0, k] = feval(T, -1)
-    Bx[1, k] = feval(T, 1)
-    By[1, k] = feval(T, 1)
-G[0, :] = vals2coeffs(g1(y))
-G[1, :] = vals2coeffs(g2(y))
-H[0, :] = vals2coeffs(h1(x))
-H[1, :] = vals2coeffs(h2(x))
+    Bx[0, k] = feval(T, 2/(zb-za)*z0 - (za+zb)/(zb-za))
+    By[0, k] = feval(T, 2/(rb-ra)*r0 - (ra+rb)/(rb-ra))
+    Bx[1, k] = feval(T, 2/(zb-za)*z1 - (za+zb)/(zb-za))
+    By[1, k] = feval(T, 2/(rb-ra)*r1 - (ra+rb)/(rb-ra))
+G[0, :] = vals2coeffs(g1(z))
+G[1, :] = vals2coeffs(g2(z))
+H[0, :] = vals2coeffs(h1(r))
+H[1, :] = vals2coeffs(h2(r))
 Bx_hat = Bx[0:2, 0:2]
 Bx = np.linalg.inv(Bx_hat) @ Bx
 G = np.linalg.inv(Bx_hat) @ G
@@ -73,7 +90,7 @@ By = np.linalg.inv(By_hat) @ By
 H = np.linalg.inv(By_hat) @ H
 
 # Assemble right-hand side:
-F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
+F = vals2coeffs(vals2coeffs(f(R, Z)).T).T
 F = (S1 @ S0) @ F @ (S1 @ S0).T
 
 # Assemble matrices for the generalized Sylvester equation:
@@ -107,14 +124,14 @@ U = np.concatenate((U1, U2), axis=0)
 
 # Plot solution:
 u = coeffs2vals(coeffs2vals(U).T).T
-plt.contourf(X, Y, u, 40, cmap=cm.coolwarm)
+plt.contourf(R, Z, u, 40, cmap=cm.coolwarm)
 plt.colorbar()
 
 # Plot exact solution:
 fig = plt.figure()
-plt.contourf(X, Y, uex(X, Y), 40, cmap=cm.coolwarm)
+plt.contourf(R, Z, uex(R, Z), 40, cmap=cm.coolwarm)
 plt.colorbar()
 
 # Error:
-error = np.max(np.abs(uex(X, Y) - u))/np.max(np.abs(uex(X, Y)))
+error = np.max(np.abs(uex(R, Z) - u))/np.max(np.abs(uex(R, Z)))
 print(f'Error (L-inf): {error:.2e}')
