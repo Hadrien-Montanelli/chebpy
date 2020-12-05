@@ -13,6 +13,7 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.sparse import csr_matrix
+import time
 
 # Chebpy imports:
 from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
@@ -40,6 +41,7 @@ y = chebpts(n)
 X, Y = np.meshgrid(x, y)
 
 # Assemble differentiation matrices:
+start = time.time()
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
 A1 = S1 @ S0 @ np.eye(n)
@@ -81,6 +83,8 @@ A1t = A1 - A1[:n, :2] @ By
 A2t = A2 - A2[:n, :2] @ By
 C1t = C1 - C1[:n, :2] @ Bx
 C2t = C2 - C2[:n, :2] @ Bx
+end = time.time()
+print(f'Time  (setup): {end-start:.5f}s')
 
 # Solve the generalized Sylvester equation:
 A1t = A1t[:n-2, 2:] 
@@ -88,7 +92,10 @@ C1t = C1t[:n-2, 2:]
 A2t = A2t[:n-2, 2:]
 C2t = C2t[:n-2:, 2:]
 Ft = Ft[:n-2, :n-2]
+start = time.time()
 U22 = gensylv(A1t, C1t, A2t, C2t, Ft)
+end = time.time()
+print(f'Time  (solve): {end-start:.5f}s')
 
 # Assemble solution:
 U12 = H[:, 2:] - By[:, 2:] @ U22
@@ -100,17 +107,14 @@ U = np.concatenate((U1, U2), axis=0)
 
 # Plot solution:
 u = coeffs2vals(coeffs2vals(U).T).T
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-surf = ax.plot_surface(X, Y, u, cmap=cm.coolwarm, linewidth=0)
-fig.colorbar(surf, shrink=0.5)
+plt.contourf(X, Y, u, 40, cmap=cm.coolwarm)
+plt.colorbar()
 
 # Plot exact solution:
 fig = plt.figure()
-ax = fig.gca(projection='3d')
-surf = ax.plot_surface(X, Y, uex(X, Y), cmap=cm.coolwarm, linewidth=0)
-fig.colorbar(surf, shrink=0.5)
+plt.contourf(X, Y, uex(X, Y), 40, cmap=cm.coolwarm)
+plt.colorbar()
 
 # Error:
 error = np.max(np.abs(uex(X,Y) - u))/np.max(np.abs(uex(X, Y)))
-print('Error:', error)
+print(f'Error (L-inf): {error:.2e}')
