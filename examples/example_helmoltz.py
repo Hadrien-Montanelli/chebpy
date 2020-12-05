@@ -19,20 +19,21 @@ import time
 from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
 from chebpy import diffmat, gensylv, spconvert
 
-# %% Solve u_xx + u_yy + u = f on [-1,1]x[-1,1] with Dirichlet conditions.
+# %% Solve u_xx + u_yy + K^2*u = 0 on [-1,1]x[-1,1] with Dirichlet conditions.
 
 # RHS:
-w = 4*pi
-f = lambda x,y: (-2*w**2 + 1)*np.sin(w*x)*np.sin(w*y)
-
-# Boundary condtions:
-g1 = lambda y: 0*y # u(-1, y) = g1(y)
-g2 = lambda y: 0*y # u(+1, y) = g2(y)
-h1 = lambda x: 0*x # u(x, -1) = h1(x)
-h2 = lambda x: 0*x # u(x, +1) = h2(x)
+f = lambda x, y: 0*x + 0*y
 
 # Exact solution:
-uex = lambda x,y: np.sin(w*x)*np.sin(w*y)
+w = 14.1
+K = np.sqrt(2)*w
+uex = lambda x, y: np.sin(w*x)*np.sin(w*y)
+
+# Boundary condtions:
+g1 = lambda y: uex(-1, y) # u(-1, y) = g1(y)
+g2 = lambda y: uex(+1, y) # u(+1, y) = g2(y)
+h1 = lambda x: uex(x, -1) # u(x, -1) = h1(x)
+h2 = lambda x: uex(x, +1) # u(x, +1) = h2(x)
 
 # Grid points:
 n = 100
@@ -45,7 +46,7 @@ start = time.time()
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
 A1 = S1 @ S0 @ np.eye(n)
-C1 = np.array(csr_matrix.todense(diffmat(n, 2))) + S1 @ S0 @ np.eye(n)
+C1 = np.array(csr_matrix.todense(diffmat(n, 2))) + S1 @ S0 @ (K**2*np.eye(n))
 A2 = np.array(csr_matrix.todense(diffmat(n, 2))) 
 C2 = S1 @ S0 @ np.eye(n)
 
@@ -61,10 +62,10 @@ for k in range(n):
     By[0, k] = feval(T, -1)
     Bx[1, k] = feval(T, 1)
     By[1, k] = feval(T, 1)
-G[0, :] = g1(y)
-G[1, :] = g2(y)
-H[0, :] = h1(x)
-H[1, :] = h2(x)
+G[0, :] = vals2coeffs(g1(y))
+G[1, :] = vals2coeffs(g2(y))
+H[0, :] = vals2coeffs(h1(x))
+H[1, :] = vals2coeffs(h2(x))
 Bx_hat = Bx[0:2, 0:2]
 Bx = np.linalg.inv(Bx_hat) @ Bx
 G = np.linalg.inv(Bx_hat) @ G
