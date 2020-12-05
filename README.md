@@ -1,5 +1,5 @@
 # About
-Python package for computing with Chebyshev polynomials.
+Python package for solving ODEs and PDEs with Chebyshev polynomials.
 
 # Installation
 
