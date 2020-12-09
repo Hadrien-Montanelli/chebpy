@@ -1,5 +1,5 @@
 # About
-Python package for solving ODEs and PDEs in 1D/2D and on the sphere.
+Python package for solving PDEs in 1D/2D and on the sphere.
 
 # Installation
 
