@@ -9,7 +9,7 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 def vals2coeffs(values):
-    """Convert values at Chebyshev points to Chebyshev coefficients."""
+    """Convert Chebyshev coefficients to values at Chebyshev points."""
     n = len(values)
     tmp = np.concatenate((values[-1:0:-1], values[0:n-1]))
     coeffs = np.fft.ifft(tmp, axis=0)
