@@ -11,7 +11,7 @@ from scipy.sparse import eye
 from scipy.sparse import spdiags
 
 def diffmat(n, m, dom=[-1, 1]):
-    """Return the n x n mth-order differentiation matrix."""
+    """Return the n x n mth-order differentiation matrix in Chebyshev space."""
     if (m>0):
         diag = [j for j in range(n)]
         D = spdiags(diag, 1, n, n)

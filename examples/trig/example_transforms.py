@@ -8,33 +8,34 @@ Copyright 2020 by Hadrien Montanelli.
 # %% Imports.
 
 # Standard library import:
+from math import pi
 import numpy as np
 
 # Chebpy imports:
-from chebpy.cheb import chebpts, coeffs2vals, vals2coeffs
+from chebpy.trig import trigpts, coeffs2vals, vals2coeffs
 
 # %% Transforms (1D) on [-1,1].
 
-f = lambda x: np.exp(-10*x**2)
-n = 100
-x = chebpts(n)
+f = lambda x: np.cos(10000*pi*x) + np.cos(5*pi*x)
+n = 101
+x = trigpts(n)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
 print('Error (1D):', np.max(np.abs(error)))
 
-# %% Transforms (1D) on [0,2].
+# %% Transforms (1D) on [0,2*pi].
 
-f = lambda x: np.exp(-10*x**2)
-n = 100
-x = chebpts(n, [0, 2])
+f = lambda x: np.exp(np.cos(10*pi*x)**2)
+n = 120
+x = trigpts(n, [0, 2*pi])
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
 print('Error (1D):', np.max(np.abs(error)))
 
 # %% Transforms (2D) on [-1,1]x[-1,1].
 
-f = lambda x, y: np.exp(-10*(x**2 + y**2))
+f = lambda x, y:  np.exp(np.cos(10*pi*x)**2)*np.sin(pi*y)**2
 n = 100
-x = chebpts(n)
-y = chebpts(n)
+x = trigpts(n)
+y = trigpts(n)
 X, Y = np.meshgrid(x, y)
 values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
@@ -44,10 +45,10 @@ print('Error (2D):', np.max(np.abs(error)))
 
 # %% Transforms (2D) on [0,2]x[-1,0].
 
-f = lambda x, y: np.exp(-10*(x**2 + y**2))
+f = lambda x, y:  np.exp(np.cos(10*pi*x)**2)*np.sin(pi*y)**2
 n = 100
-x = chebpts(n, [0, 2])
-y = chebpts(n, [-1, 0])
+x = trigpts(n, [-pi, pi])
+y = trigpts(n, [0, 4*pi])
 X, Y = np.meshgrid(x, y)
 values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T

@@ -9,11 +9,13 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 def coeffs2vals(coeffs):
-    """Convert values at Chebyshev points to Chebyshev coefficients."""
+    """Convert Fourier coefficients to values at equispaced points."""
     n = len(coeffs)
-    coeffs2 = coeffs.copy()
-    coeffs2[1:n-2] = 1/2*coeffs2[1:n-2]
-    tmp = np.concatenate((coeffs2, coeffs2[-2:0:-1]))
-    values = np.fft.fft(tmp, axis=0)
-    values = np.real(values[n-1::-1])
+    if (n % 2 == 1):
+        tmp = (-1)**np.arange(-(n-1)/2, (n-1)/2+1)
+    else:
+        tmp = (-1)**np.arange(-n/2, n/2)
+    coeffs = tmp * coeffs
+    coeffs = np.fft.ifftshift(coeffs)
+    values = n*np.fft.ifft(coeffs, axis=0)
     return values
