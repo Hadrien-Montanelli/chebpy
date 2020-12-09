@@ -7,7 +7,7 @@ Copyright 2020 by Hadrien Montanelli.
 """
 # %% Imports.
 
-# Standard library import:
+# Standard library imports:
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import spy
 import numpy as np

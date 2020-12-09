@@ -5,7 +5,7 @@ Created on Wed Dec  2 19:00:03 2020
 
 Copyright 2020 by Hadrien Montanelli.
 """
-# Standard library import:
+# Standard library imports:
 import numpy as np
 from scipy.linalg import qz
 from scipy.linalg import solve

@@ -43,7 +43,7 @@ values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
 print('Error (2D):', np.max(np.abs(error)))
 
-# %% Transforms (2D) on [0,2]x[-1,0].
+# %% Transforms (2D) on [-pi,pi]x[0,4*pi].
 
 f = lambda x, y:  np.exp(np.cos(10*pi*x)**2)*np.sin(pi*y)**2
 n = 100

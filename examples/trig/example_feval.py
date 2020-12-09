@@ -8,19 +8,20 @@ Copyright 2020 by Hadrien Montanelli.
 # %% Imports.
 
 # Standard library imports:
+from math import pi
 import numpy as np
 
 # Chebpy imports:
-from chebpy.cheb import chebpts, feval, vals2coeffs
+from chebpy.trig import trigpts, feval, vals2coeffs
 
-# %% Evaluate f(x) = cos(x)*exp(-x^2).
+# %% Evaluate f(x) = cos(pi*x)*exp(-sin(pi*x)^2).
 
 # Function:
-f = lambda x: np.cos(x)*np.exp(-x**2)
+f = lambda x: np.cos(pi*x)*np.exp(-np.sin(pi*x)**2)
 
-# Chebyshev grid:
-n = 30
-x = chebpts(n)
+# Equispaced grid:
+n = 101
+x = trigpts(n)
 F = vals2coeffs(f(x))
 
 # Evaluation grid:
