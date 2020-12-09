@@ -11,7 +11,7 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 # Chebpy imports:
-from chebpy import chebpts, coeffs2vals, vals2coeffs
+from chebpy.cheb import chebpts, coeffs2vals, vals2coeffs
 
 # %% Transforms (1D) on [-1,1].
 

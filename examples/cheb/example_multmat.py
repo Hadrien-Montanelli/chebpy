@@ -12,7 +12,7 @@ from matplotlib.pyplot import spy
 import numpy as np
 
 # Chebpy imports:
-from chebpy import chebpts, coeffs2vals, multmat, spconvert, vals2coeffs
+from chebpy.cheb import chebpts, coeffs2vals, multmat, spconvert, vals2coeffs
 
 # %% Multiplication g = f*h on [-1,1].
 

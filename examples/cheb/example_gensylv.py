@@ -11,7 +11,7 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 # Chebpy imports:
-from chebpy import gensylv
+from chebpy.cheb import gensylv
 
 # %% Solve generalized Sylvester equation AXB^T + CXD^T = E.
 

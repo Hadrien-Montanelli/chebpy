@@ -17,8 +17,8 @@ from scipy.special import airy
 import time
 
 # Chebpy imports:
-from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
-from chebpy import diffmat, multmat, spconvert
+from chebpy.cheb import chebpts, coeffs2vals, feval, vals2coeffs
+from chebpy.cheb import diffmat, multmat, spconvert
 
 # %% Solve eps*u''(x) - x*u(x) = 0 on [-1,1] with u(-1) = c and u(1) = d.
     

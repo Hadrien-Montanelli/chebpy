@@ -11,7 +11,7 @@ Copyright 2020 by Hadrien Montanelli.
 import numpy as np
 
 # Chebpy imports:
-from chebpy import chebpts, feval, vals2coeffs
+from chebpy.cheb import chebpts, feval, vals2coeffs
 
 # %% Evaluate f(x) = cos(x)*exp(-x^2).
 

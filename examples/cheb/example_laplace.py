@@ -15,18 +15,17 @@ from scipy.sparse import csr_matrix
 import time
 
 # Chebpy imports:
-from chebpy import chebpts, coeffs2vals, feval, vals2coeffs
-from chebpy import diffmat, gensylv, spconvert
+from chebpy.cheb import chebpts, coeffs2vals, feval, vals2coeffs
+from chebpy.cheb import diffmat, gensylv, spconvert
 
-# %% Solve u_xx + u_yy + K^2*u = 0 on [-1,1]x[-1,1], Dirichlet conditions.
+# %% Solve u_xx + u_yy = f on [-1,1]x[-1,1], Dirichlet conditions.
 
 # RHS:
-f = lambda x, y: 0*x + 0*y
+w = 21.2
+f = lambda x, y: -2*w**2*np.sin(w*x)*np.sin(w*y)
 
 # Exact solution:
-w = 14.1
-K = np.sqrt(2)*w
-uex = lambda x, y: np.sin(w*x)*np.sin(w*y)
+uex = lambda x, y: 1 + np.sin(w*x)*np.sin(w*y)
 
 # Boundary condtions:
 g1 = lambda y: uex(-1, y) # u(-1, y) = g1(y)
@@ -45,8 +44,8 @@ start = time.time()
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
 A1 = S1 @ S0 @ np.eye(n)
-C1 = np.array(csr_matrix.todense(diffmat(n, 2))) + S1 @ S0 @ (K**2*np.eye(n))
-A2 = np.array(csr_matrix.todense(diffmat(n, 2))) 
+C1 = np.array(csr_matrix.todense(diffmat(n, 2)))
+A2 = np.array(csr_matrix.todense(diffmat(n, 2)))
 C2 = S1 @ S0 @ np.eye(n)
 
 # Assemble boundary conditions:
