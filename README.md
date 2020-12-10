@@ -1,6 +1,5 @@
 # About
-Python package for solving ODEs and PDEs with Chebyshev and trigonometric 
-polynomials.
+Python package for solving PDEs in 1D, 2D & on the sphere.
 
 # Installation
 
