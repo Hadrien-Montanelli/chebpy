@@ -8,6 +8,7 @@ Copyright 2020 by Hadrien Montanelli.
 # %% Imports.
 
 # Standard library imports:
+import matplotlib.pyplot as plt
 from matplotlib.pyplot import spy
 import numpy as np
 
@@ -22,7 +23,7 @@ h = lambda x: np.sin(x)*x**2
 gex = lambda x: f(x)*h(x)
 
 # Grid:
-n = 50
+n = 500
 x = chebpts(n)
 
 # Compute coeffs of f:
@@ -58,6 +59,7 @@ F = vals2coeffs(f(x))
 
 # Multiplication by h matrix in coefficient space:
 M = multmat(n, h, [0, 2])
+plt.figure()
 spy(M)
 
 # Multiply:
@@ -92,6 +94,7 @@ for k in range(lam):
     
 # Multiplication by h matrix in in the C^{(lam)} basis:
 M = multmat(n, h, [-1, 1], lam)
+plt.figure()
 spy(M)
 
 # Multiply in the C^{(lam)} basis:

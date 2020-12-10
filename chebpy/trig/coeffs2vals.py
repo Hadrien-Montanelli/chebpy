@@ -18,4 +18,5 @@ def coeffs2vals(coeffs):
     coeffs = tmp * coeffs
     coeffs = np.fft.ifftshift(coeffs)
     values = n*np.fft.ifft(coeffs, axis=0)
+    values = np.real(values)
     return values

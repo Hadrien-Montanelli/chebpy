@@ -72,14 +72,15 @@ S1 = spconvert(n, 1)
 M0 = multmat(n, a0, [a, b], 0)
 M1 = multmat(n, a1, [a, b], 1)
 M2 = multmat(n, a2, [a, b], 2)
-L = M2 @ np.array(csr_matrix.todense(D2)) + S1 @ M1 @ D1 + S1 @ S0 @ M0
+L = M2 @ D2 + S1 @ M1 @ D1 + S1 @ S0 @ M0
+L = np.array(csr_matrix.todense(L))
 for k in range(n):
     T = np.zeros(n)
     T[k] = 1
     L[-2, k] = feval(T, 2/(b-a)*x0 - (a+b)/(b-a))
     L[-1, k] = feval(T, 2/(b-a)*x1 - (a+b)/(b-a))
 L = np.roll(L, 2, axis=0)
-L = csr_matrix(np.round(L, 13))
+L = csr_matrix(np.round(L, 15))
 spy(L)
 
 # Assemble RHS:
@@ -88,7 +89,7 @@ F = S1 @ S0 @ F
 F = np.roll(F, 2)
 F[0] = c
 F[1] = d
-F = csr_matrix(np.round(F, 15)).T
+F = csr_matrix(np.round(F, 13)).T
 end = time.time()
 print(f'Time  (setup): {end-start:.5f}s')
 
@@ -100,7 +101,7 @@ print(f'Time  (solve): {end-start:.5f}s')
 
 # Plot and compute error:
 u = coeffs2vals(U)
-fig = plt.figure()
+plt.figure()
 plt.plot(x, u, '.')
 plt.plot(x, uex)
 error = np.max(np.abs(u - uex))/np.max(np.abs(uex))

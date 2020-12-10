@@ -42,18 +42,17 @@ uex = ai
 
 # Assemble matrices:
 start = time.time()
-D = diffmat(n, 2)
+D2 = diffmat(n, 2)
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
 M = multmat(n, lambda x: -x)
-L = eps*np.array(csr_matrix.todense(D)) + S1 @ S0 @ M
-for k in range(n):
-    T = np.zeros(n)
-    T[k] = 1
-    L[-2, k] = feval(T, -1)
-    L[-1, k] = feval(T, 1)
+L = eps*D2 + S1 @ S0 @ M
+L = np.array(csr_matrix.todense(L))
+L[-2, :] = (-1)**np.arange(0, n)
+L[-1, :] = np.ones(n)
 L = np.roll(L, 2, axis=0)
 L = csr_matrix(L)
+spy(L)
 
 # Assemble RHS:
 F = vals2coeffs(f(x))
@@ -73,7 +72,7 @@ print(f'Time (solve):  {end-start:.5f}s')
 
 # Plot and compute error:
 u = coeffs2vals(U)
-fig = plt.figure()
+plt.figure()
 plt.plot(x, u, '.')
 plt.plot(x, uex)
 error = np.max(np.abs(u - uex))/np.max(np.abs(uex))
@@ -105,11 +104,12 @@ uex = ai
 
 # Assemble matrices:
 start = time.time()
-D = diffmat(n, 2, [a, b])
+D2 = diffmat(n, 2, [a, b])
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
 M = multmat(n, lambda x: -x, [a, b])
-L = eps*np.array(csr_matrix.todense(D)) + S1 @ S0 @ M
+L = eps*D2 + S1 @ S0 @ M
+L = np.array(csr_matrix.todense(L))
 for k in range(n):
     T = np.zeros(n)
     T[k] = 1
@@ -117,6 +117,7 @@ for k in range(n):
     L[-1, k] = feval(T, 2/(b-a)*b - (a+b)/(b-a))
 L = np.roll(L, 2, axis=0)
 L = csr_matrix(np.round(L, 15))
+plt.figure()
 spy(L)
 
 # Assemble RHS:
@@ -137,7 +138,7 @@ print(f'Time  (solve): {end-start:.5f}s')
 
 # Plot and compute error:
 u = coeffs2vals(U)
-fig = plt.figure()
+plt.figure()
 plt.plot(x, u, '.')
 plt.plot(x, uex)
 error = np.max(np.abs(u - uex))/np.max(np.abs(uex))

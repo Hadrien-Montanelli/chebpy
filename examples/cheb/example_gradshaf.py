@@ -54,14 +54,14 @@ R, Z = np.meshgrid(r, z)
 
 # Assemble differentiation matrices:
 start = time.time()
-S0 = np.array(csr_matrix.todense(spconvert(n, 0)))
-S1 = np.array(csr_matrix.todense(spconvert(n, 1)))
-D1r = np.array(csr_matrix.todense(diffmat(n, 1, [ra, rb])))
-D2r = np.array(csr_matrix.todense(diffmat(n, 2, [ra, rb])))
-D2z = np.array(csr_matrix.todense(diffmat(n, 2, [za, zb])))
+S0 = spconvert(n, 0)
+S1 = spconvert(n, 1)
+D1r = diffmat(n, 1, [ra, rb])
+D2r = diffmat(n, 2, [ra, rb])
+D2z = diffmat(n, 2, [za, zb])
 M0 = multmat(n, lambda r: r, [ra, rb], 0)
 M2 = multmat(n, lambda r: r, [ra, rb], 2)
-A1 = S1 @ S0 @ np.eye(n)
+A1 = S1 @ S0
 C1 = M2 @ D2r - S1 @ D1r
 A2 = D2z
 C2 = S1 @ S0 @ M0
@@ -94,6 +94,10 @@ F = vals2coeffs(vals2coeffs(f(R, Z)).T).T
 F = (S1 @ S0) @ F @ (S1 @ S0).T
 
 # Assemble matrices for the generalized Sylvester equation:
+A1 = np.array(csr_matrix.todense(A1))
+C1 = np.array(csr_matrix.todense(C1))
+A2 = np.array(csr_matrix.todense(A2))
+C2 = np.array(csr_matrix.todense(C2))
 Ft = F - A1[:n, :2] @ H @ C1.T - (A1 - A1[:n, :2] @ By) @ G.T @ C1[:n, :2].T
 Ft = Ft - A2[:n, :2] @ H @ C2.T - (A2 - A2[:n, :2] @ By) @ G.T @ C2[:n, :2].T
 A1t = A1 - A1[:n, :2] @ By

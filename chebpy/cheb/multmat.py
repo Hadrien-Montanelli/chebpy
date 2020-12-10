@@ -10,6 +10,7 @@ import numpy as np
 from scipy.linalg import hankel
 from scipy.linalg import toeplitz
 from scipy.sparse import csr_matrix
+from scipy.sparse import eye
 from scipy.sparse import spdiags
 
 # Chebpy imports:
@@ -22,24 +23,28 @@ def multmat(n, f, dom=[-1, 1], lam=0):
     # Get the Chebyshev coefficients:
     x = chebpts(n, dom)
     F = vals2coeffs(f(x))
-    
+
     # Multiplication in the Chebyshev bsis:
-    if (lam==0):
+    if (lam == 0):
         
         # Scale first term:
         F[0] = 2*F[0]
         
         # Toeplitz part:
         T = toeplitz(F)
+        T = np.round(T, 15)
+        T = csr_matrix(T)
         
         # Hankel part:
         H = hankel(F[1:])
         H = np.concatenate((H, np.zeros([n-1, 1])), axis=1)
         H = np.concatenate((np.zeros([1, n]), H), axis=0)
+        H = np.round(H, 15)
+        H = csr_matrix(H)
         
         # Assemble M:
-        M = csr_matrix(np.round(1/2*(T + H), 15))
-    
+        M = 1/2*(T + H)
+
     # Multiplication in the C^{(lam)} basis:
     else:
         
@@ -49,7 +54,7 @@ def multmat(n, f, dom=[-1, 1], lam=0):
             F = S @ F
             
         # Assemble matrices:
-        M0 = np.eye(n)
+        M0 = eye(n)
         d0 = np.ones(1)
         d1 = np.concatenate((d0, np.arange(2*lam, 2*lam + n - 1)), axis=0)
         d1 = d1/np.concatenate((d0, 2*np.arange(lam + 1, lam + n)), axis=0)
@@ -69,6 +74,6 @@ def multmat(n, f, dom=[-1, 1], lam=0):
             M1 = M2
             if (np.abs(F[k+2:]).all() < 1e-15):
                 break
-        M = csr_matrix(np.round(M, 15))    
+        M = np.round(M, 15)  
             
     return M

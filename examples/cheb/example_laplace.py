@@ -43,10 +43,10 @@ X, Y = np.meshgrid(x, y)
 start = time.time()
 S0 = spconvert(n, 0)
 S1 = spconvert(n, 1)
-A1 = S1 @ S0 @ np.eye(n)
-C1 = np.array(csr_matrix.todense(diffmat(n, 2)))
-A2 = np.array(csr_matrix.todense(diffmat(n, 2)))
-C2 = S1 @ S0 @ np.eye(n)
+A1 = S1 @ S0
+C1 = diffmat(n, 2)
+A2 = diffmat(n, 2)
+C2 = S1 @ S0
 
 # Assemble boundary conditions:
 Bx = np.zeros([2, n])
@@ -76,6 +76,10 @@ F = vals2coeffs(vals2coeffs(f(X, Y)).T).T
 F = (S1 @ S0) @ F @ (S1 @ S0).T
 
 # Assemble matrices for the generalized Sylvester equation:
+A1 = np.array(csr_matrix.todense(A1))
+C1 = np.array(csr_matrix.todense(C1))
+A2 = np.array(csr_matrix.todense(A2))
+C2 = np.array(csr_matrix.todense(C2))
 Ft = F - A1[:n, :2] @ H @ C1.T - (A1 - A1[:n, :2] @ By) @ G.T @ C1[:n, :2].T
 Ft = Ft - A2[:n, :2] @ H @ C2.T - (A2 - A2[:n, :2] @ By) @ G.T @ C2[:n, :2].T
 A1t = A1 - A1[:n, :2] @ By
