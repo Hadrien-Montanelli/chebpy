@@ -22,9 +22,10 @@ def multmat(n, f, dom=[-1, 1]):
     x = trigpts(4*n, dom)
     F = vals2coeffs(f(x))
     F = np.concatenate((F, np.array([F[0]/2])), axis=0)
-    F[0] = 1/2*F[0]
     digits = int(15 - np.floor(np.log10(np.max(np.abs(F)))))
-    
+    F = np.round(F, digits)
+    F[0] = 1/2*F[0]
+        
     # Projection matrices:
     P = eye(n+1, n)
     P = lil_matrix(P)
@@ -38,8 +39,8 @@ def multmat(n, f, dom=[-1, 1]):
     Q[0, n+2] = 1
     
     # Multiplication matrix:
-    col = np.round(F[2*n:], digits)
-    row = np.round(np.flipud(F[:2*n+1]), digits)
+    col = F[2*n:]
+    row = np.flipud(F[:2*n+1])
     M = csr_matrix(sptoeplitz(col, row))
     
     # Truncate and project:

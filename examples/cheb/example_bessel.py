@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import spy
 import numpy as np
 from scipy.sparse import csr_matrix
+from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.special import jv, yv
 import time
@@ -63,7 +64,7 @@ C2 = C2/(Y1[-1] - Y1[0]*J1[-1]/J1[0])
 C1 = (np.exp(-a**2/2)*c - C2*Y1[0])/J1[0]
 uex = np.exp(x**2/2)*(C1*J1 + C2*Y1)
 
-# Assemble matrices:
+# Assemble matrices: O(n^2) complexity because of feval.
 start = time.time()
 D1 = diffmat(n, 1, [a, b])
 D2 = diffmat(n, 2, [a, b])
@@ -73,22 +74,20 @@ M0 = multmat(n, a0, [a, b], 0)
 M1 = multmat(n, a1, [a, b], 1)
 M2 = multmat(n, a2, [a, b], 2)
 L = M2 @ D2 + S1 @ M1 @ D1 + S1 @ S0 @ M0
-L = np.array(csr_matrix.todense(L))
+L = lil_matrix(L)
 for k in range(n):
     T = np.zeros(n)
     T[k] = 1
     L[-2, k] = feval(T, 2/(b-a)*x0 - (a+b)/(b-a))
     L[-1, k] = feval(T, 2/(b-a)*x1 - (a+b)/(b-a))
-L = np.roll(L, 2, axis=0)
-L = csr_matrix(np.round(L, 15))
+L = csr_matrix(L)
 spy(L)
 
 # Assemble RHS:
 F = vals2coeffs(f(x))
 F = S1 @ S0 @ F
-F = np.roll(F, 2)
-F[0] = c
-F[1] = d
+F[-2] = c
+F[-1] = d
 F = csr_matrix(np.round(F, 13)).T
 end = time.time()
 print(f'Time  (setup): {end-start:.5f}s')

@@ -13,3 +13,5 @@ from .gensylv import gensylv
 from .multmat import multmat
 from .vals2coeffs import vals2coeffs
 from .spconvert import spconvert
+from .sphankel import sphankel
+from .sptoeplitz import sptoeplitz

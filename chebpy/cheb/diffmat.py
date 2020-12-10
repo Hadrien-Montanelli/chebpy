@@ -17,7 +17,7 @@ def diffmat(n, m, dom=[-1, 1]):
         D = spdiags(diag, 1, n, n)
         for s in range(1, m):
             diag = 2*s*np.ones(n)
-            D = spdiags(diag, 1, n, n)*D
+            D = spdiags(diag, 1, n, n) @ D
         D = (2/(dom[1] - dom[0]))**m*D
     else:
         D = eye(n)

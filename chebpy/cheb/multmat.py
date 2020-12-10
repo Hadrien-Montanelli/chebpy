@@ -7,15 +7,17 @@ Copyright 2020 by Hadrien Montanelli.
 """
 # Standard imports:
 import numpy as np
-from scipy.linalg import hankel
-from scipy.linalg import toeplitz
 from scipy.sparse import csr_matrix
 from scipy.sparse import eye
+from scipy.sparse import hstack
+from scipy.sparse import vstack
 from scipy.sparse import spdiags
 
 # Chebpy imports:
 from .chebpts import chebpts
 from .spconvert import spconvert
+from .sphankel import sphankel
+from .sptoeplitz import sptoeplitz
 from .vals2coeffs import vals2coeffs
 
 def multmat(n, f, dom=[-1, 1], lam=0):
@@ -23,24 +25,22 @@ def multmat(n, f, dom=[-1, 1], lam=0):
     # Get the Chebyshev coefficients:
     x = chebpts(n, dom)
     F = vals2coeffs(f(x))
-
+        
     # Multiplication in the Chebyshev bsis:
     if (lam == 0):
         
         # Scale first term:
+        digits = int(15 - np.floor(np.log10(np.max(np.abs(F)))))
+        F = np.round(F, digits)
         F[0] = 2*F[0]
         
         # Toeplitz part:
-        T = toeplitz(F)
-        T = np.round(T, 15)
-        T = csr_matrix(T)
+        T = sptoeplitz(F, F)
         
         # Hankel part:
-        H = hankel(F[1:])
-        H = np.concatenate((H, np.zeros([n-1, 1])), axis=1)
-        H = np.concatenate((np.zeros([1, n]), H), axis=0)
-        H = np.round(H, 15)
-        H = csr_matrix(H)
+        H = sphankel(F[1:])
+        H = hstack([H, csr_matrix(np.zeros([n-1, 1]))])
+        H = vstack([csr_matrix(np.zeros([1, n])), H])
         
         # Assemble M:
         M = 1/2*(T + H)
@@ -52,7 +52,7 @@ def multmat(n, f, dom=[-1, 1], lam=0):
         for k in range(lam):
             S = spconvert(n, k)
             F = S @ F
-            
+        
         # Assemble matrices:
         M0 = eye(n)
         d0 = np.ones(1)
@@ -64,15 +64,15 @@ def multmat(n, f, dom=[-1, 1], lam=0):
         diags[2, :] = d1
         Mx = spdiags(diags, [-1, 0, 1], n, n)
         M1 = 2*lam*Mx
-        
-        # Assemble M with three-term recurrence:
+
+        # Assemble M with three-term recurrence: O(n^2) complexity.
         M = F[0]*M0 + F[1]*M1
         for k in range(1, n-1):
             M2 = 2*(k + lam)/(k + 1)*(Mx @ M1) - (k + 2*lam - 1)/(k + 1)*M0
             M = M + F[k+1]*M2
             M0 = M1
             M1 = M2
-            if (np.abs(F[k+2:]).all() < 1e-15):
+            if (np.abs(F[k+2:]).all() < np.finfo(float).eps):
                 break
         M = np.round(M, 15)  
             

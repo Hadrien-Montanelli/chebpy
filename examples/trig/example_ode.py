@@ -22,7 +22,7 @@ from chebpy.trig import diffmat, multmat
 # %% Solve on [0,2*pi].
     
 # Grid:
-n = 1000
+n = 10000
 x = trigpts(n, [0, 2*pi])
 
 # Right-hand side f:
@@ -40,13 +40,13 @@ spy(L)
 # Assemble RHS:
 F = vals2coeffs(f(x))
 end = time.time()
-print(f'Time (setup):  {end-start:.5f}s')
+print(f'Time (setup): {end-start:.5f}s')
 
 # Sparse solve:
 start = time.time()
 U = spsolve(L, F)
 end = time.time()
-print(f'Time (solve):  {end-start:.5f}s')
+print(f'Time (solve): {end-start:.5f}s')
 
 # Plot and compute error:
 u = coeffs2vals(U)
