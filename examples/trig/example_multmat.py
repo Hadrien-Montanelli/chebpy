@@ -24,7 +24,7 @@ h = lambda x: np.cos(np.exp(np.sin(10*pi*x)))
 gex = lambda x: f(x)*h(x)
 
 # Grid:
-n = 600
+n = 2000
 x = trigpts(n)
 
 # Compute coeffs of f:
@@ -52,7 +52,7 @@ h = lambda x: np.cos(np.exp(np.sin(10*x)))
 gex = lambda x: f(x)*h(x)
 
 # Grid:
-n = 600
+n = 2000
 x = trigpts(n, [0, 2*pi])
 
 # Compute coeffs of f:
