@@ -28,21 +28,21 @@ from chebpy.trig import diffmat, multmat
 
 # DFS method:
 def feval(f, LAM, TT):
-    n = len(lam)
+    n = len(LAM)
     Y = np.zeros([n, n])
     for i in range(n):
         for j in range(n):
-            if (TT[j, 0] >= 0):
-                Y[j, i] = f(LAM[0, i], TT[j, 0])
+            if (TT[i, 0] >= 0):
+                Y[i, j] = f(LAM[0, j], TT[i, 0])
             else:
-                if (LAM[0, i] <=0):
-                    Y[j, i] = f(LAM[0, i] + pi, -TT[j, 0])
+                if (LAM[0, j] <=0):
+                    Y[i, j] = f(LAM[0, j] + pi, -TT[i, 0])
                 else:
-                    Y[j, i] = f(LAM[0, i] - pi, -TT[j, 0])
+                    Y[i, j] = f(LAM[0, j] - pi, -TT[i, 0])
     return Y
     
 # RHS:
-l = 2
+l = 4
 f1 = lambda lam, tt: l*(l+1) * np.sin(tt)**l * np.cos(l*lam)
 f2 = lambda lam, tt: (l+1)*(l+2) * np.cos(tt) * np.sin(tt)**l * np.cos(l*lam)
 f = lambda lam, tt: f1(lam, tt) + f2(lam, tt)
@@ -53,7 +53,7 @@ uex2 = lambda lam, tt: -np.cos(tt) * np.sin(tt)**l * np.cos(l*lam)
 uex = lambda lam, tt: uex1(lam, tt) + uex2(lam, tt)
     
 # Grid points:
-n = 32
+n = 64
 dom = [-pi, pi]
 lam = trigpts(n, dom)
 tt = trigpts(n, dom)
@@ -88,7 +88,7 @@ for k in range(n):
     blocks.append(block)
 L = block_diag(blocks, format='csr')
 end = time.time()
-print(f'Time  (setup): {end-start:.5f}s')
+print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()
 spy(L)
 
@@ -96,7 +96,7 @@ spy(L)
 start = time.time()
 U = spsolve(L, kron(I, Tsin2) @ F)
 end = time.time()
-print(f'Time  (solve): {end-start:.5f}s')
+print(f'Time   (solve): {end-start:.5f}s')
 U = np.reshape(U, (n, n)).T
 
 # Plot solution:
@@ -113,4 +113,16 @@ plt.colorbar()
 # Error:
 error = feval(uex, LAM, TT) - u
 error = np.max(np.abs(error))/np.max(np.abs(feval(uex, LAM, TT)))
-print(f'Error (L-inf): {error:.2e}')
+print(f'Error  (L-inf): {error:.2e}')
+
+# Pole condition:
+rowsum1 = np.zeros(n)
+rowsum2 = np.zeros(n)
+for i in range(n):
+    if (i == n/2+1):
+        continue
+    else:
+        rowsum1[i] = np.abs(np.sum(U[:, i]))
+        rowsum2[i] = np.abs(np.sum(U[:, i] * (-1)**(i-n/2-1)))
+P = max(np.max(rowsum1), np.max(rowsum2))
+print(f'Pole condition: {P:.2e}')
