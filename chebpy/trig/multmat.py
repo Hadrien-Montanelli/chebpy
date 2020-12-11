@@ -24,7 +24,6 @@ def multmat(n, f, dom=[-1, 1]):
     F = np.concatenate((F, np.array([F[0]/2])), axis=0)
     digits = int(15 - np.floor(np.log10(np.max(np.abs(F)))))
     F = np.round(F, digits)
-    F[0] = 1/2*F[0]
         
     # Projection matrices:
     P = eye(n+1, n)
@@ -36,7 +35,7 @@ def multmat(n, f, dom=[-1, 1]):
     row[int(n/2)] = 1
     Q = sptoeplitz(col, row)
     Q = lil_matrix(Q)
-    Q[0, n+2] = 1
+    Q[0, 3*int(n/2)] = 1
     
     # Multiplication matrix:
     col = F[2*n:]
