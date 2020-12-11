@@ -19,7 +19,7 @@ import time
 from chebpy.trig import trigpts, coeffs2vals, vals2coeffs
 from chebpy.trig import diffmat, multmat
 
-# %% Solve on [0,2*pi].
+# %% Solve u''(x) + sin(x)*u'(x) + 1000*cos(2x)*u(x) = f on [0,2*pi].
     
 # Grid:
 n = 10000

@@ -12,7 +12,10 @@ def vals2coeffs(values):
     """Convert values at equispaced points to Fourier coefficients."""
     n = len(values)
     coeffs = np.fft.fft(1/n*values, axis=0)
-    coeffs = np.fft.fftshift(coeffs)
+    if (len(coeffs.shape) > 1):
+        coeffs = np.fft.fftshift(coeffs, axes=1)
+    else:
+        coeffs = np.fft.fftshift(coeffs)
     if (n % 2 == 1):
         tmp = (-1)**np.arange(-(n-1)/2, (n-1)/2+1)
     else:

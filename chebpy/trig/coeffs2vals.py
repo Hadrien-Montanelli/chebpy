@@ -16,7 +16,10 @@ def coeffs2vals(coeffs):
     else:
         tmp = (-1)**np.arange(-n/2, n/2)
     coeffs = tmp * coeffs
-    coeffs = np.fft.ifftshift(coeffs)
+    if (len(coeffs.shape) > 1):
+        coeffs = np.fft.ifftshift(coeffs, axes=1)
+    else:
+        coeffs = np.fft.ifftshift(coeffs)
     values = n*np.fft.ifft(coeffs, axis=0)
     values = np.real(values)
     return values
