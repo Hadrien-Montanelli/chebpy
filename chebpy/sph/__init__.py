@@ -9,5 +9,6 @@ from .coeffs2vals import coeffs2vals
 from .feval import feval
 from .laplacian import laplacian
 from .mean import mean
+from .polecond import polecond
 from .vals2coeffs import vals2coeffs
 from .spharm import spharm

@@ -21,7 +21,8 @@ import time
 # Chebpy imports:
 from chebpy.imex import start_imex
 from chebpy.trig import multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, laplacian, spharm, vals2coeffs
+from chebpy.sph import coeffs2vals, feval, vals2coeffs, polecond
+from chebpy.sph import laplacian, spharm
 
 # %% Solve u_t = alpha*Laplacian(u) on the sphere.
     
@@ -104,13 +105,5 @@ error = np.max(np.abs(uex - u))/np.max(np.abs(uex))
 print(f'Error  (L-inf): {error:.2e}')
 
 # Pole condition:
-rowsum1 = np.zeros(n)
-rowsum2 = np.zeros(n)
-for i in range(n):
-    if (i == n/2+1):
-        continue
-    else:
-        rowsum1[i] = np.abs(np.sum(U[:, i]))
-        rowsum2[i] = np.abs(np.sum(U[:, i] * (-1)**(i-n/2-1)))
-P = max(np.max(rowsum1), np.max(rowsum2))
+P = polecond(U)
 print(f'Pole condition: {P:.2e}')
