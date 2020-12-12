@@ -19,6 +19,7 @@ from scipy.sparse.linalg import splu
 import time
 
 # Chebpy imports:
+from chebpy.imex import start_imex
 from chebpy.trig import multmat, trigpts
 from chebpy.sph import coeffs2vals, feval, laplacian, spharm, vals2coeffs
 
@@ -60,7 +61,7 @@ U0 = np.reshape(U0.T, (n*n, 1))
 start = time.time()
 L = alpha*laplacian(n, 0)
 
-# LU factorization of IMEX-BDF4 matrix:
+# LU factorization of BDF4 matrix:
 I = eye(n)
 Tsin2 = multmat(n, lambda x: np.sin(x)**2, [-pi, pi])
 Tsin2 = csc_matrix(kron(I, Tsin2))
@@ -68,11 +69,8 @@ lu = splu(25*Tsin2 - 12*dt*L)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 
-# Start initial condition with exact solution:
-U = [U0]
-for i in range(1, q):
-    t = i*dt
-    U = [np.exp(-t)*U0] + U
+# Start initial condition with LIRK4:
+U, NU = start_imex(lambda u: 0*u, n, dt, U0, alpha, q)
     
 # Time-stepping:
 start = time.time()
