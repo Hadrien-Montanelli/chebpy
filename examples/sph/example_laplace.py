@@ -12,13 +12,13 @@ from math import pi
 from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.sparse import block_diag, eye, kron, lil_matrix
+from scipy.sparse import eye, kron
 from scipy.sparse.linalg import spsolve
 import time
 
 # Chebpy imports:
-from chebpy.trig import diffmat, multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, vals2coeffs
+from chebpy.trig import multmat, trigpts
+from chebpy.sph import coeffs2vals, feval, laplacian, vals2coeffs
 
 # %% Solve u_xx + u_yy = f on the sphere.
 
@@ -49,25 +49,7 @@ F[n*int(n/2) + int(n/2)] = 0
 
 # Assemble Laplacian:
 start = time.time()
-I = eye(n)
-D1 = diffmat(n, 1, dom)
-D2 = diffmat(n, 2, dom)
-Tsin2 = multmat(n, lambda x: np.sin(x)**2, dom)
-Tcossin = multmat(n, lambda x: np.cos(x)*np.sin(x), dom)
-blocks = []
-for k in range(n):
-    block = Tsin2 @ D2 + Tcossin @ D1 + D2[k, k]*I
-    if (k == int(n/2)):
-        mm = np.arange(-n/2, n/2)
-        mm[int(n/2)-1] = 0
-        mm[int(n/2)+1] = 0
-        en = 2*pi*(1 + np.exp(1j*pi*mm))/(1 - mm**2)
-        en[int(n/2)-1] = 0
-        en[int(n/2)+1] = 0
-        block = lil_matrix(block)
-        block[int(n/2), :] = en
-    blocks.append(block)
-L = block_diag(blocks, format='csr')
+L = laplacian(n)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()
@@ -75,6 +57,8 @@ plt.spy(L)
 
 # Sparse solve:
 start = time.time()
+I = eye(n)
+Tsin2 = multmat(n, lambda x: np.sin(x)**2, dom)
 U = spsolve(L, kron(I, Tsin2) @ F)
 end = time.time()
 print(f'Time   (solve): {end-start:.5f}s')
