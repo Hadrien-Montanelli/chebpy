@@ -18,7 +18,7 @@ import time
 
 # Chebpy imports:
 from chebpy.trig import multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, laplacian, mean, vals2coeffs
+from chebpy.sph import coeffs2vals, feval, laplacian, vals2coeffs
 
 # %% Solve u_xx + u_yy = f on the sphere.
 

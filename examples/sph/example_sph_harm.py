@@ -39,4 +39,4 @@ plt.colorbar()
 # Check orthonormality:
 F = vals2coeffs(feval(Y, LAM, TT) * feval(Y, LAM, TT))
 mu = mean(F)
-print(f'Mean of: {mu:.2e}')
+print(f'Mean of Y_{l,m}^2: {mu:.2e}')
