@@ -79,6 +79,7 @@ for k in range(n):
     L[-2, k] = feval(T, 2/(b-a)*x0 - (a+b)/(b-a))
     L[-1, k] = feval(T, 2/(b-a)*x1 - (a+b)/(b-a))
 L = csr_matrix(L)
+plt.figure()
 plt.spy(L)
 
 # Assemble RHS:

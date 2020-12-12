@@ -34,6 +34,7 @@ D2 = diffmat(n, 2, [0, 2*pi])
 M0 = multmat(n, lambda x: 1000*np.cos(2*x), [0, 2*pi])
 M1 = multmat(n, lambda x: np.sin(x), [0, 2*pi])
 L = D2 + M1 @ D1 + M0
+plt.figure()
 plt.spy(L)
 
 # Assemble RHS:

@@ -9,7 +9,6 @@ Copyright 2020 by Hadrien Montanelli.
 
 # Standard library imports:
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import spy
 import numpy as np
 import time
 
@@ -35,7 +34,8 @@ start = time.time()
 M = multmat(n, h)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
-spy(M)
+plt.figure()
+plt.spy(M)
 
 # Multiply:
 start = time.time()
@@ -69,7 +69,8 @@ start = time.time()
 M = multmat(n, h, [0, 2])
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
-spy(M)
+plt.figure()
+plt.spy(M)
 
 # Multiply:
 start = time.time()
@@ -110,7 +111,7 @@ M = multmat(n, h, [-1, 1], lam)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()
-spy(M)
+plt.spy(M)
 
 # Multiply in the C^{(lam)} basis:
 start = time.time()

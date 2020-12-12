@@ -50,6 +50,7 @@ L = lil_matrix(L)
 L[-2, :] = (-1)**np.arange(0, n)
 L[-1, :] = np.ones(n)
 L = csr_matrix(L)
+plt.figure()
 plt.spy(L)
 
 # Assemble RHS:
@@ -66,7 +67,7 @@ U = spsolve(L, F)
 end = time.time()
 print(f'Time  (solve):  {end-start:.5f}s')
 
-# Plot and compute error:
+# Plot solution and compute error:
 u = coeffs2vals(U)
 plt.figure()
 plt.plot(x, u, '.')
@@ -129,7 +130,7 @@ U = spsolve(L, F)
 end = time.time()
 print(f'Time  (solve): {end-start:.5f}s')
 
-# Plot and compute error:
+# Plot solution and compute error:
 u = coeffs2vals(U)
 plt.figure()
 plt.plot(x, u, '.')

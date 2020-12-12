@@ -35,6 +35,7 @@ start = time.time()
 M = multmat(n, h)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
+plt.figure()
 plt.spy(M)
 
 # Multiply:

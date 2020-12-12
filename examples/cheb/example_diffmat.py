@@ -8,7 +8,7 @@ Copyright 2020 by Hadrien Montanelli.
 # %% Imports.
 
 # Standard library imports:
-from matplotlib.pyplot import spy
+import matplotlib.pyplot as plt
 import numpy as np
 import time
 
@@ -35,7 +35,8 @@ start = time.time()
 D = diffmat(n, 1, dom)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
-spy(D)
+plt.figure()
+plt.spy(D)
 
 # Differentiate:
 start = time.time()
@@ -72,7 +73,8 @@ start = time.time()
 D2 = diffmat(n, 2, dom)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
-spy(D)
+plt.figure()
+plt.spy(D2)
 
 # Differentiate:
 start = time.time()
