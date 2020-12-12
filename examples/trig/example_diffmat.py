@@ -14,7 +14,7 @@ import numpy as np
 import time
 
 # Chebpy imports:
-from chebpy.trig import trigpts, coeffs2vals, diffmat, vals2coeffs
+from chebpy.trig import coeffs2vals, diffmat, trigpts, vals2coeffs
 
 # %% First-order differentiation on [-pi, pi].
 

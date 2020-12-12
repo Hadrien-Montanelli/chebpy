@@ -9,10 +9,8 @@ Copyright 2020 by Hadrien Montanelli.
 
 # Standard library imports:
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import spy
 import numpy as np
-from scipy.sparse import csr_matrix
-from scipy.sparse import lil_matrix
+from scipy.sparse import csr_matrix, lil_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.special import airy
 import time
@@ -52,7 +50,7 @@ L = lil_matrix(L)
 L[-2, :] = (-1)**np.arange(0, n)
 L[-1, :] = np.ones(n)
 L = csr_matrix(L)
-spy(L)
+plt.spy(L)
 
 # Assemble RHS:
 F = vals2coeffs(f(x))
@@ -115,7 +113,7 @@ for k in range(n):
     L[-1, k] = feval(T, 2/(b-a)*b - (a+b)/(b-a))
 L = csr_matrix(L)
 plt.figure()
-spy(L)
+plt.spy(L)
 
 # Assemble RHS:
 F = vals2coeffs(f(x))

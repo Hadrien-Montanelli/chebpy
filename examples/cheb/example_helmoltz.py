@@ -16,7 +16,8 @@ import time
 
 # Chebpy imports:
 from chebpy.cheb import chebpts, coeffs2vals, feval, vals2coeffs
-from chebpy.cheb import diffmat, gensylv, spconvert
+from chebpy.cheb import diffmat, spconvert
+from chebpy.nla import gensylv
 
 # %% Solve u_xx + u_yy + K^2*u = 0 on [-1,1]x[-1,1], Dirichlet conditions.
 

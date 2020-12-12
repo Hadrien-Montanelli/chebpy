@@ -12,7 +12,7 @@ from math import pi
 import numpy as np
 
 # Chebpy imports:
-from chebpy.trig import trigpts, coeffs2vals, vals2coeffs
+from chebpy.trig import coeffs2vals, trigpts, vals2coeffs
 
 # %% Transforms (1D) on [-1,1].
 

@@ -17,8 +17,10 @@ def feval(F, x):
     for k in range(m):
         if (n % 2 == 1):
             tmp = F * np.exp(1j * np.arange(-(n-1)/2, (n-1)/2+1) * pi * x[k])
+            tmp = np.real(tmp)
             y[k] = np.sum(tmp)
         else:
             tmp = F * np.exp(1j * np.arange(-n/2, n/2)* pi * x[k])
+            tmp = np.real(tmp)
             y[k] = np.sum(tmp)
     return y

@@ -8,13 +8,12 @@ Copyright 2020 by Hadrien Montanelli.
 # %% Imports.
 
 # Standard library imports:
-from math import pi
 from matplotlib.pyplot import spy
 import numpy as np
 import time
 
 # Chebpy imports:
-from chebpy.cheb import chebpts, coeffs2vals, diffmat, spconvert, vals2coeffs
+from chebpy.cheb import chebpts, diffmat, spconvert, vals2coeffs
 
 # %% First-order differentiation on [-1, 1].
 

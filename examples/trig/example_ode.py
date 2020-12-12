@@ -10,13 +10,12 @@ Copyright 2020 by Hadrien Montanelli.
 # Standard library imports:
 from math import pi
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import spy
 import numpy as np
 from scipy.sparse.linalg import spsolve
 import time
 
 # Chebpy imports:
-from chebpy.trig import trigpts, coeffs2vals, vals2coeffs
+from chebpy.trig import coeffs2vals, trigpts, vals2coeffs
 from chebpy.trig import diffmat, multmat
 
 # %% Solve u''(x) + sin(x)*u'(x) + 1000*cos(2x)*u(x) = f on [0,2*pi].
@@ -35,7 +34,7 @@ D2 = diffmat(n, 2, [0, 2*pi])
 M0 = multmat(n, lambda x: 1000*np.cos(2*x), [0, 2*pi])
 M1 = multmat(n, lambda x: np.sin(x), [0, 2*pi])
 L = D2 + M1 @ D1 + M0
-spy(L)
+plt.spy(L)
 
 # Assemble RHS:
 F = vals2coeffs(f(x))

@@ -12,7 +12,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 # Chebpy imports:
-from chebpy.cheb import sphankel
+from chebpy.nla import sphankel
 
 # %% Test 1.
 

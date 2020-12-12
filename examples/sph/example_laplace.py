@@ -11,17 +11,13 @@ Copyright 2020 by Hadrien Montanelli.
 from math import pi
 from matplotlib import cm
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import spy
 import numpy as np
-from scipy.sparse import lil_matrix
-from scipy.sparse import block_diag
-from scipy.sparse import eye
-from scipy.sparse import kron
+from scipy.sparse import block_diag, eye, kron, lil_matrix
 from scipy.sparse.linalg import spsolve
 import time
 
 # Chebpy imports:
-from chebpy.trig import trigpts, coeffs2vals, vals2coeffs
+from chebpy.trig import coeffs2vals, trigpts, vals2coeffs
 from chebpy.trig import diffmat, multmat
 
 # %% Solve u_xx + u_yy = f on the sphere.
@@ -90,7 +86,7 @@ L = block_diag(blocks, format='csr')
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()
-spy(L)
+plt.spy(L)
 
 # Sparse solve:
 start = time.time()

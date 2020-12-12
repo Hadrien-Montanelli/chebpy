@@ -12,7 +12,7 @@ from math import pi
 import numpy as np
 
 # Chebpy imports:
-from chebpy.trig import trigpts, feval, vals2coeffs
+from chebpy.trig import feval, trigpts, vals2coeffs
 
 # %% Evaluate f(x) = cos(pi*x)*exp(-sin(pi*x)^2).
 

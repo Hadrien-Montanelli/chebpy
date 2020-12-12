@@ -12,7 +12,7 @@ from scipy.sparse import eye
 from scipy.sparse import lil_matrix
 
 # Chebpy imports:
-from .sptoeplitz import sptoeplitz
+from ..nla.sptoeplitz import sptoeplitz
 from .trigpts import trigpts
 from .vals2coeffs import vals2coeffs
 

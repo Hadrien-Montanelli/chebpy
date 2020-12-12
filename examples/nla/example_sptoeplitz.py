@@ -12,7 +12,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 # Chebpy imports:
-from chebpy.trig import sptoeplitz
+from chebpy.nla import sptoeplitz
 
 # %% Test 1.
 

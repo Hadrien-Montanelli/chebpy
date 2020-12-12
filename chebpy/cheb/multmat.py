@@ -16,8 +16,8 @@ from scipy.sparse import spdiags
 # Chebpy imports:
 from .chebpts import chebpts
 from .spconvert import spconvert
-from .sphankel import sphankel
-from .sptoeplitz import sptoeplitz
+from ..nla.sphankel import sphankel
+from ..nla.sptoeplitz import sptoeplitz
 from .vals2coeffs import vals2coeffs
 
 def multmat(n, f, dom=[-1, 1], lam=0):

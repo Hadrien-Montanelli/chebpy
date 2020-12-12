@@ -13,7 +13,7 @@ from scipy.sparse import lil_matrix
 from scipy.sparse import spdiags
 
 # Chebpy imports:
-from .sptoeplitz import sptoeplitz
+from ..nla.sptoeplitz import sptoeplitz
 
 def diffmat(n, m, dom=[-1, 1]):
     """Return the n x n mth-order differentiation matrix in Fourier space."""

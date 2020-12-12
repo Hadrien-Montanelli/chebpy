@@ -9,6 +9,5 @@ from .coeffs2vals import coeffs2vals
 from .diffmat import diffmat
 from .feval import feval
 from .multmat import multmat
-from .sptoeplitz import sptoeplitz
 from .trigpts import trigpts
 from .vals2coeffs import vals2coeffs

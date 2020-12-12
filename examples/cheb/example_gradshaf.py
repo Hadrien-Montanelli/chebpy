@@ -16,7 +16,8 @@ import time
 
 # Chebpy imports:
 from chebpy.cheb import chebpts, coeffs2vals, feval, vals2coeffs
-from chebpy.cheb import diffmat, gensylv, multmat, spconvert
+from chebpy.cheb import diffmat, multmat, spconvert
+from chebpy.nla import gensylv
 
 # %% Solve r*u_rr - u_r + r*u_zz = f on [ra,rb]x[za,zb], Dirichlet conditions.
 

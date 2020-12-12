@@ -10,12 +10,11 @@ Copyright 2020 by Hadrien Montanelli.
 # Standard library imports:
 from math import pi
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import spy
 import numpy as np
 import time
 
 # Chebpy imports:
-from chebpy.trig import trigpts, coeffs2vals, multmat, vals2coeffs
+from chebpy.trig import coeffs2vals, multmat, trigpts, vals2coeffs
 
 # %% Multiplication g = f*h on [-1,1].
 
@@ -36,7 +35,7 @@ start = time.time()
 M = multmat(n, h)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
-spy(M)
+plt.spy(M)
 
 # Multiply:
 start = time.time()
@@ -71,7 +70,7 @@ M = multmat(n, h, [0, 2*pi])
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()
-spy(M)
+plt.spy(M)
 
 # Multiply:
 start = time.time()
