@@ -1,2 +1,5 @@
 chebpy/cheb/__pycache__/
+chebpy/imex/__pycache__/
+chebpy/nla/__pycache__/
+chebpy/sph/__pycache__/
 chebpy/trig/__pycache__/

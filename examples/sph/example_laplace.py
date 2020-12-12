@@ -17,28 +17,13 @@ from scipy.sparse.linalg import spsolve
 import time
 
 # Chebpy imports:
-from chebpy.trig import coeffs2vals, trigpts, vals2coeffs
-from chebpy.trig import diffmat, multmat
+from chebpy.trig import diffmat, multmat, trigpts
+from chebpy.sph import coeffs2vals, feval, vals2coeffs
 
 # %% Solve u_xx + u_yy = f on the sphere.
 
-# DFS method:
-def feval(f, LAM, TT):
-    n = len(LAM)
-    Y = np.zeros([n, n])
-    for i in range(n):
-        for j in range(n):
-            if (TT[i, 0] >= 0):
-                Y[i, j] = f(LAM[0, j], TT[i, 0])
-            else:
-                if (LAM[0, j] <=0):
-                    Y[i, j] = f(LAM[0, j] + pi, -TT[i, 0])
-                else:
-                    Y[i, j] = f(LAM[0, j] - pi, -TT[i, 0])
-    return Y
-    
 # RHS:
-l = 4
+l = 10
 f1 = lambda lam, tt: l*(l+1) * np.sin(tt)**l * np.cos(l*lam)
 f2 = lambda lam, tt: (l+1)*(l+2) * np.cos(tt) * np.sin(tt)**l * np.cos(l*lam)
 f = lambda lam, tt: f1(lam, tt) + f2(lam, tt)
@@ -56,7 +41,7 @@ tt = trigpts(n, dom)
 LAM, TT = np.meshgrid(lam, tt)
 
 # Assemble RHS:
-F = vals2coeffs(vals2coeffs(feval(f, LAM, TT)).T).T 
+F = vals2coeffs(feval(f, LAM, TT))
 F = np.reshape(F.T, (n*n, 1))
 
 # Zero-mean condition:
@@ -96,7 +81,7 @@ print(f'Time   (solve): {end-start:.5f}s')
 U = np.reshape(U, (n, n)).T
 
 # Plot solution:
-u = coeffs2vals(coeffs2vals(U).T).T
+u = coeffs2vals(U)
 plt.figure()
 plt.contourf(LAM, TT, u, 40, cmap=cm.coolwarm)
 plt.colorbar()
