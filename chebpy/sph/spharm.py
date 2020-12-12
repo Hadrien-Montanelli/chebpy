@@ -10,7 +10,7 @@ from math import factorial, pi, sqrt
 import numpy as np
 from scipy.special import lpmv
 
-def sph_harm(l, m):
+def spharm(l, m):
     """Return spherical harmonic Y_{l,m}."""
     if (m >=0):
         P = lambda x: lpmv(m, l, x)

@@ -20,7 +20,7 @@ import time
 from chebpy.trig import multmat, trigpts
 from chebpy.sph import coeffs2vals, feval, laplacian, vals2coeffs
 
-# %% Solve u_xx + u_yy = f on the sphere.
+# %% Solve Laplacian(u) = f on the sphere.
 
 # RHS:
 l = 10
@@ -62,9 +62,9 @@ Tsin2 = multmat(n, lambda x: np.sin(x)**2, dom)
 U = spsolve(L, kron(I, Tsin2) @ F)
 end = time.time()
 print(f'Time   (solve): {end-start:.5f}s')
-U = np.reshape(U, (n, n)).T
 
 # Plot solution:
+U = np.reshape(U, (n, n)).T
 u = coeffs2vals(U)
 plt.figure()
 plt.contourf(LAM, TT, u, 40, cmap=cm.coolwarm)

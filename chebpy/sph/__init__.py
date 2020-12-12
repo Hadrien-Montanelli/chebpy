@@ -10,4 +10,4 @@ from .feval import feval
 from .laplacian import laplacian
 from .mean import mean
 from .vals2coeffs import vals2coeffs
-from .sph_harm import sph_harm
+from .spharm import spharm
