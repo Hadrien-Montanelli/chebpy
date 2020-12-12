@@ -16,9 +16,5 @@ def vals2coeffs(values):
         coeffs = np.fft.fftshift(coeffs, axes=1)
     else:
         coeffs = np.fft.fftshift(coeffs)
-    if (n % 2 == 1):
-        tmp = (-1)**np.arange(-(n-1)/2, (n-1)/2+1)
-    else:
-        tmp = (-1)**np.arange(-n/2, n/2)
-    coeffs = tmp * coeffs
+    coeffs = (-1)**np.arange(-n/2, n/2) * coeffs
     return coeffs

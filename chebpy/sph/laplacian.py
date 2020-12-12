@@ -33,10 +33,10 @@ def laplacian(n, flag_mean=1, flag_sin2=1):
         for k in range(n):
             block = D2 + Tsin2inv @ Tcossin @ D1 + D2[k, k]*Tsin2inv
             if (k == int(n/2) and flag_mean == 1): # mean condition
-                mm = np.arange(-n/2, n/2)
-                mm[int(n/2)-1] = 0
-                mm[int(n/2)+1] = 0
-                en = 2*pi*(1 + np.exp(1j*pi*mm))/(1 - mm**2)
+                nn = np.arange(-n/2, n/2)
+                nn[int(n/2)-1] = 0
+                nn[int(n/2)+1] = 0
+                en = 2*pi*(1 + np.exp(1j*pi*nn))/(1 - nn**2)
                 en[int(n/2)-1] = 0
                 en[int(n/2)+1] = 0
                 block = lil_matrix(block)
@@ -49,10 +49,10 @@ def laplacian(n, flag_mean=1, flag_sin2=1):
         for k in range(n):
             block = Tsin2 @ D2 + Tcossin @ D1 + D2[k, k]*I
             if (k == int(n/2) and flag_mean == 1): # mean condition
-                mm = np.arange(-n/2, n/2)
-                mm[int(n/2)-1] = 0
-                mm[int(n/2)+1] = 0
-                en = 2*pi*(1 + np.exp(1j*pi*mm))/(1 - mm**2)
+                nn = np.arange(-n/2, n/2)
+                nn[int(n/2)-1] = 0
+                nn[int(n/2)+1] = 0
+                en = 2*pi*(1 + np.exp(1j*pi*nn))/(1 - nn**2)
                 en[int(n/2)-1] = 0
                 en[int(n/2)+1] = 0
                 block = lil_matrix(block)

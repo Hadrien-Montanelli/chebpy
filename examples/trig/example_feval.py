@@ -20,7 +20,7 @@ from chebpy.trig import feval, trigpts, vals2coeffs
 f = lambda x: np.cos(pi*x)*np.exp(-np.sin(pi*x)**2)
 
 # Equispaced grid:
-n = 101
+n = 100
 x = trigpts(n)
 F = vals2coeffs(f(x))
 

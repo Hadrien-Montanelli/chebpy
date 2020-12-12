@@ -11,11 +11,7 @@ import numpy as np
 def coeffs2vals(coeffs):
     """Convert Fourier coefficients to values at equispaced points."""
     n = len(coeffs)
-    if (n % 2 == 1):
-        tmp = (-1)**np.arange(-(n-1)/2, (n-1)/2+1)
-    else:
-        tmp = (-1)**np.arange(-n/2, n/2)
-    coeffs = tmp * coeffs
+    coeffs = (-1)**np.arange(-n/2, n/2) * coeffs
     if (len(coeffs.shape) > 1):
         coeffs = np.fft.ifftshift(coeffs, axes=1)
     else:

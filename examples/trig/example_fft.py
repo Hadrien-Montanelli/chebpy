@@ -17,7 +17,7 @@ from chebpy.trig import coeffs2vals, trigpts, vals2coeffs
 # %% Transforms (1D) on [-1,1].
 
 f = lambda x: np.cos(10000*pi*x) + np.cos(5*pi*x)
-n = 101
+n = 100
 x = trigpts(n)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
 print('Error (1D):', np.max(np.abs(error)))
