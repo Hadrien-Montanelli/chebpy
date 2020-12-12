@@ -21,17 +21,22 @@ import time
 # Chebpy imports:
 from chebpy.imex import start_imex
 from chebpy.trig import multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, laplacian, spharm, vals2coeffs
+from chebpy.sph import coeffs2vals, feval, laplacian, vals2coeffs
 
-# %% Solve u_t = alpha*Laplacian(u) on the sphere.
-    
+# %% Solve u_t = alpha*Laplacian(u) + N(u) on the sphere.
+
 # Initial condition:
-l = 5
-m = 3
-u0 = spharm(l, m)
-
-# Laplacian constant:
-alpha = 1/(l*(l + 1))
+x = lambda ll, tt: np.cos(ll) * np.sin(tt)
+y = lambda ll, tt: np.sin(ll) * np.sin(tt)
+z = lambda ll, tt: np.cos(tt)
+u0 = lambda ll, tt: 5*x(ll,tt)*z(ll,tt) - 10*y(ll,tt)
+    
+# Nonlinearity and Laplacian constant:
+alpha = 1e-2
+c2v = lambda u: coeffs2vals(np.reshape(u, (n, n)))
+v2c = lambda u: np.reshape(vals2coeffs(u), (n*n, 1))
+Nv = lambda u: u - u**3
+N = lambda u: v2c(Nv(c2v(u)))
     
 # Grid points:
 n = 64
@@ -67,7 +72,7 @@ end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 
 # Start initial condition with LIRK4:
-U, NU = start_imex(lambda u: 0*u, n, dt, U0, alpha, q)
+U, NU = start_imex(N, n, dt, U0, alpha, q)
     
 # Time-stepping:
 start = time.time()
@@ -76,11 +81,14 @@ for itr in range(q, itrmax + 1):
     
     # Compute new solution:
     b = 48*U[0] - 36*U[1] + 16*U[2] - 3*U[3] 
+    b += dt*(48*NU[0] - 72*NU[1] + 48*NU[2] - 12*NU[3])
     Unew = lu.solve(Tsin2 @ b)
     
     # Update:
     U = [Unew] + U
+    NU = [N(Unew)] + NU
     U.pop()
+    NU.pop()
     
 end = time.time()
 print(f'Time   (solve): {end-start:.5f}s')
@@ -91,17 +99,6 @@ u = coeffs2vals(U)
 plt.figure()
 plt.contourf(LAM, TT, u, 40, cmap=cm.coolwarm)
 plt.colorbar()
-
-# Plot exact solution:
-Uex = np.exp(-T)*np.reshape(U0, (n, n)).T
-uex = coeffs2vals(Uex)
-plt.figure()
-plt.contourf(LAM, TT, uex, 40, cmap=cm.coolwarm)
-plt.colorbar()
-
-# Error:
-error = np.max(np.abs(uex - u))/np.max(np.abs(uex))
-print(f'Error  (L-inf): {error:.2e}')
 
 # Pole condition:
 rowsum1 = np.zeros(n)
