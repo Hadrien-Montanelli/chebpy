@@ -11,13 +11,13 @@ import numpy as np
 def pcond(F):
     """Test the pole condition for the DFS coefficients F."""
     n = len(F)
-    rowsum1 = np.zeros(n)
-    rowsum2 = np.zeros(n)
+    sum1 = np.zeros(n)
+    sum2 = np.zeros(n)
     for k in range(n):
         if (k == n/2):
             continue
         else:
-            rowsum1[k] = abs(np.sum(F[:, k]))
-            rowsum2[k] = abs(np.sum(F[:, k] * (-1)**(k-n/2)))
-    P = max(np.max(rowsum1), np.max(rowsum2))
+            sum1[k] = abs(np.sum(F[:, k]))
+            sum2[k] = abs(np.sum(F[:, k] * (-1)**(k-n/2)))
+    P = max(np.max(sum1), np.max(sum2))
     return P
