@@ -16,9 +16,11 @@ from ..nla.sptoeplitz import sptoeplitz
 from .trigpts import trigpts
 from .vals2coeffs import vals2coeffs
 
-def multmat(n, f, dom=[-1, 1], flag=0):
+def multmat(n, f, dom=[-1, 1], proj=1):
     """Return the n x n multiplication by f matrix in Fourier space."""
-    if (flag == 0):
+    
+    # Multiplication with projection matrices P and Q:
+    if (proj == 1):
         
         # Get the Fourier coefficients:
         x = trigpts(4*n, dom)
@@ -48,6 +50,7 @@ def multmat(n, f, dom=[-1, 1], flag=0):
         # Truncate and project:
         M = Q @ M[:, int(n/2):3*int(n/2)+1] @ P
         
+    # Multiplication without projection:
     else:
         
         # Get the Fourier coefficients:

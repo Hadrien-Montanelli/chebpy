@@ -47,9 +47,9 @@ F = np.reshape(F.T, (n*n, 1))
 # Zero-mean condition:
 F[n*int(n/2) + int(n/2)] = 0
 
-# Assemble Laplacian:
+# Assemble Laplacian (with mean condition):
 start = time.time()
-L = laplacian(n)
+L = laplacian(n, 1)
 end = time.time()
 print(f'Time   (setup): {end-start:.5f}s')
 plt.figure()

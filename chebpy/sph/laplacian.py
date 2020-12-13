@@ -15,7 +15,7 @@ from scipy.sparse.linalg import inv
 from ..trig.diffmat import diffmat
 from ..trig.multmat import multmat
 
-def laplacian(n, flag_mean=1, flag_sin2=1):
+def laplacian(n, mean_cond=0, mult_sin2=1):
     """Return the (n*n) x (n*n) Laplacian on the sphere."""
     
     # Differentiation and multiplication matrices:
@@ -26,13 +26,12 @@ def laplacian(n, flag_mean=1, flag_sin2=1):
     Tsin2 = multmat(n, lambda x: np.sin(x)**2, dom)
     Tcossin = multmat(n, lambda x: np.cos(x)*np.sin(x), dom)
     
-    # Blocks (not multiplied by sin^2):
-    if (flag_sin2 == 0):
-        Tsin2inv = inv(Tsin2)
+    # Blocks multiplied by sin^2 (sin^2*Laplacian):
+    if (mult_sin2 == 1):
         blocks = []
         for k in range(n):
-            block = D2 + Tsin2inv @ Tcossin @ D1 + D2[k, k]*Tsin2inv
-            if (k == int(n/2) and flag_mean == 1): # mean condition
+            block = Tsin2 @ D2 + Tcossin @ D1 + D2[k, k]*I
+            if (k == int(n/2) and mean_cond == 1): # mean condition
                 nn = np.arange(-n/2, n/2)
                 nn[int(n/2)-1] = 0
                 nn[int(n/2)+1] = 0
@@ -43,12 +42,13 @@ def laplacian(n, flag_mean=1, flag_sin2=1):
                 block[int(n/2), :] = en
             blocks.append(block)
             
-    # Blocks (multiplied by sin^2):
-    if (flag_sin2 == 1):
+    # Blocks not multiplied by sin^2 (true Laplacian):
+    if (mult_sin2 == 0):
+        Tsin2inv = inv(Tsin2)
         blocks = []
         for k in range(n):
-            block = Tsin2 @ D2 + Tcossin @ D1 + D2[k, k]*I
-            if (k == int(n/2) and flag_mean == 1): # mean condition
+            block = D2 + Tsin2inv @ Tcossin @ D1 + D2[k, k]*Tsin2inv
+            if (k == int(n/2) and mean_cond == 1): # mean condition
                 nn = np.arange(-n/2, n/2)
                 nn[int(n/2)-1] = 0
                 nn[int(n/2)+1] = 0

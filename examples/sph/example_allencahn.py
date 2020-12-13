@@ -61,7 +61,7 @@ U0 = np.reshape(U0.T, (n*n, 1))
 
 # Assemble Laplacian:
 start = time.time()
-L = alpha*laplacian(n, 0)
+L = alpha*laplacian(n)
 
 # LU factorization of BDF4 matrix:
 I = eye(n)
