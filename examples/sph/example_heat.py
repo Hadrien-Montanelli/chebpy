@@ -12,16 +12,14 @@ from math import pi
 from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.sparse import csc_matrix
-from scipy.sparse import eye
-from scipy.sparse import kron
+from scipy.sparse import csc_matrix, eye, kron
 from scipy.sparse.linalg import splu
 import time
 
 # Chebpy imports:
 from chebpy.imex import start_imex
 from chebpy.trig import multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, vals2coeffs, polecond
+from chebpy.sph import bmc, coeffs2vals, feval, vals2coeffs, pcond
 from chebpy.sph import laplacian, spharm
 
 # %% Solve u_t = alpha*Laplacian(u) on the sphere.
@@ -104,6 +102,10 @@ plt.colorbar()
 error = np.max(np.abs(uex - u))/np.max(np.abs(uex))
 print(f'Error  (L-inf): {error:.2e}')
 
+# BMC symmetry:
+S = bmc(U)
+print(f'BMC-I symmetry: {S:.2e}')
+
 # Pole condition:
-P = polecond(U)
+P = pcond(U)
 print(f'Pole condition: {P:.2e}')

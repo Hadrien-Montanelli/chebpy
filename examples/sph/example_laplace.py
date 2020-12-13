@@ -18,7 +18,7 @@ import time
 
 # Chebpy imports:
 from chebpy.trig import multmat, trigpts
-from chebpy.sph import coeffs2vals, feval, laplacian, vals2coeffs, polecond
+from chebpy.sph import bmc, coeffs2vals, feval, laplacian, vals2coeffs, pcond
 
 # %% Solve Laplacian(u) = f on the sphere.
 
@@ -80,6 +80,10 @@ error = feval(uex, LAM, TT) - u
 error = np.max(np.abs(error))/np.max(np.abs(feval(uex, LAM, TT)))
 print(f'Error  (L-inf): {error:.2e}')
 
+# BMC symmetry:
+S = bmc(U)
+print(f'BMC-I symmetry: {S:.2e}')
+
 # Pole condition:
-P = polecond(U)
+P = pcond(U)
 print(f'Pole condition: {P:.2e}')
