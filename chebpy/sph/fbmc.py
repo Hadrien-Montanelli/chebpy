@@ -14,7 +14,9 @@ def fbmc(F):
     
     # Get the dimension:
     n = len(F)
-    Fbmc = np.zeros([n, n], dtype=complex)
+    #Fbmc = np.zeros([n, n], dtype=complex)
+    #Fbmc = np.ones([n, n], dtype=complex) + 1j*np.ones([n, n])
+    Fbmc = F.copy()
     
     # %% Step 1: enforce f_{j,k} = -f_{-j,k} for odd k.   
     
@@ -53,20 +55,6 @@ def fbmc(F):
     # Minimum Frobenius-norm solution:
     C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Feven)
     Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
-    
-    # # Exctract even modes in k and all modes in j:
-    # idx_k = 2*np.arange(int(n/2))
-    # idx_j = np.arange(n)
-    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
-    # Feven = F[idx_j, idx_k]
-    
-    # # Matrices:
-    # I = np.eye(int(n/2)-1, n-2)
-    # A = I - np.fliplr(I)
-    
-    # # Minimum Frobenius-norm solution:
-    # C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Feven)
-    # Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
     
     # %% Step 3: enforce Re(f_{j,k}) = -Re(f_{j,-k}) for odd k.   
     
