@@ -14,29 +14,28 @@ def fbmc(F):
     
     # Get the dimension:
     n = len(F)
-    Fbmc = np.zeros([n, n], dtype=complex)
-    #Fbmc = F.copy()
+    Fbmc = F.copy()
     
     # %% Step 1: enforce f_{j,k} = -f_{-j,k} for odd k.   
     
-    # # Exctract odd modes in k and all modes in j:
-    # idx_k = 2*np.arange(int(n/2)) + 1
-    # idx_j = np.arange(n)
-    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
-    # Fodd = F[idx_j, idx_k]
+    # Exctract odd modes in k and all modes in j:
+    idx_k = 2*np.arange(int(n/2)) + 1
+    idx_j = np.arange(n)
+    idx_k, idx_j = np.meshgrid(idx_k, idx_j)
+    Fodd = F[idx_j, idx_k]
     
-    # # Matrices:
-    # I = np.eye(int(n/2)+1, n)
-    # col = np.zeros(int(n/2)+1)
-    # col[1] = 1
-    # row = np.zeros(n)
-    # J = toeplitz(col, row)
-    # A = I + np.fliplr(J)
-    # A[-1, int(n/2)] = 1
+    # Matrices:
+    I = np.eye(int(n/2)+1, n)
+    col = np.zeros(int(n/2)+1)
+    col[1] = 1
+    row = np.zeros(n)
+    J = toeplitz(col, row)
+    A = I + np.fliplr(J)
+    A[-1, int(n/2)] = 1
     
-    # # Minimum Frobenius-norm solution:
-    # C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Fodd)
-    # Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
+    # Minimum Frobenius-norm solution:
+    C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Fodd)
+    Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
     
     # %% Step 2: enforce f_{j,k} = f_{-j,k} for even k.   
     
