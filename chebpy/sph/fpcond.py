@@ -13,19 +13,20 @@ def fpcond(F):
     
     # Get the dimension:
     n = len(F)
-
+    Fp = np.zeros([n, n], dtype=complex)
+    
     # Negative wavenumbers:
     G = F[:, :int(n/2)]
     A = np.ones([2, n])
     A[1, :] = (-1)**np.arange(0, n)
     C = A.T @ (np.linalg.inv(A @ A.T) @ A @ G)
-    F[:, :int(n/2)] = F[:, :int(n/2)] - C
+    Fp[:, :int(n/2)] = F[:, :int(n/2)] - C
     
     # Positive wavenumbers:
     G = F[:, int(n/2)+1:]
     A = np.ones([2, n])
     A[1, :] = (-1)**np.arange(1, n+1)
     C = A.T @ (np.linalg.inv(A @ A.T) @ A @ G)
-    F[:, int(n/2)+1:] = F[:, int(n/2)+1:] - C
+    Fp[:, int(n/2)+1:] = F[:, int(n/2)+1:] - C
     
-    return F
+    return Fp

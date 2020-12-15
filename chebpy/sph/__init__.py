@@ -8,6 +8,7 @@ Copyright 2020 by Hadrien Montanelli.
 from .bmc import bmc
 from .coeffs2vals import coeffs2vals
 from .feval import feval
+from .fbmc import fbmc
 from .fpcond import fpcond
 from .laplacian import laplacian
 from .mean import mean
