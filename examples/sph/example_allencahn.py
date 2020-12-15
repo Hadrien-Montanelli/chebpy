@@ -44,8 +44,8 @@ tt = trigpts(n, dom)
 LAM, TT = np.meshgrid(lam, tt)
 
 # Time discretization:
-dt = 1e-3
-T = 1
+dt = 1e-2
+T = 10
 q = 4
 
 # Plot initial condition:

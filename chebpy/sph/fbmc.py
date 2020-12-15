@@ -14,43 +14,60 @@ def fbmc(F):
     
     # Get the dimension:
     n = len(F)
-    #Fbmc = np.zeros([n, n], dtype=complex)
-    #Fbmc = np.ones([n, n], dtype=complex) + 1j*np.ones([n, n])
-    Fbmc = F.copy()
+    Fbmc = np.zeros([n, n], dtype=complex)
+    #Fbmc = F.copy()
     
     # %% Step 1: enforce f_{j,k} = -f_{-j,k} for odd k.   
     
-    # Exctract odd modes in k and all modes in j:
-    idx_k = 2*np.arange(int(n/2)) + 1
-    idx_j = np.arange(n)
-    idx_k, idx_j = np.meshgrid(idx_k, idx_j)
-    Fodd = F[idx_j, idx_k]
+    # # Exctract odd modes in k and all modes in j:
+    # idx_k = 2*np.arange(int(n/2)) + 1
+    # idx_j = np.arange(n)
+    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
+    # Fodd = F[idx_j, idx_k]
     
-    # Matrices:
-    I = np.eye(int(n/2)+1, n)
-    col = np.zeros(int(n/2)+1)
-    col[1] = 1
-    row = np.zeros(n)
-    J = toeplitz(col, row)
-    A = I + np.fliplr(J)
-    A[-1, int(n/2)] = 1
+    # # Matrices:
+    # I = np.eye(int(n/2)+1, n)
+    # col = np.zeros(int(n/2)+1)
+    # col[1] = 1
+    # row = np.zeros(n)
+    # J = toeplitz(col, row)
+    # A = I + np.fliplr(J)
+    # A[-1, int(n/2)] = 1
     
-    # Minimum Frobenius-norm solution:
-    C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Fodd)
-    Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
+    # # Minimum Frobenius-norm solution:
+    # C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Fodd)
+    # Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
     
     # %% Step 2: enforce f_{j,k} = f_{-j,k} for even k.   
     
-    # Exctract even modes in k and all modes in j (but exclude j=-n/2, 0):
+    # # Exctract even modes in k and all modes in j (but exclude j=-n/2, 0):
+    # idx_k = 2*np.arange(int(n/2))
+    # idx_j = np.arange(1, int(n/2))
+    # idx_j = np.concatenate((idx_j, np.arange(int(n/2) + 1, n)))
+    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
+    # Feven = F[idx_j, idx_k]
+    
+    # # Matrices:
+    # I = np.eye(int(n/2)-1, n-2)
+    # A = I - np.fliplr(I)
+    
+    # Exctract even modes in k and all modes in j, and enforce pole condition:
     idx_k = 2*np.arange(int(n/2))
-    idx_j = np.arange(1, int(n/2))
-    idx_j = np.concatenate((idx_j, np.arange(int(n/2) + 1, n)))
+    idx_j = np.arange(n)
     idx_k, idx_j = np.meshgrid(idx_k, idx_j)
     Feven = F[idx_j, idx_k]
     
     # Matrices:
-    I = np.eye(int(n/2)-1, n-2)
-    A = I - np.fliplr(I)
+    I = np.eye(int(n/2), n)
+    col = np.zeros(int(n/2))
+    col[1] = 1
+    row = np.zeros(n)
+    J = toeplitz(col, row)
+    A = I - np.fliplr(J)
+    A[0, :] = 1
+    P = np.zeros([1, n])
+    P[0, :] = (-1)**np.arange(n)
+    A = np.concatenate((P, A), axis=0)
     
     # Minimum Frobenius-norm solution:
     C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Feven)

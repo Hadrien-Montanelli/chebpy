@@ -18,6 +18,6 @@ def pcond(F):
             continue
         else:
             sum1[k] = abs(np.sum(F[:, k]))
-            sum2[k] = abs(np.sum(F[:, k] * (-1)**(k-n/2)))
+            sum2[k] = abs(np.sum(F[:, k] * (-1)**np.arange(n)))
     P = max(np.max(sum1), np.max(sum2))
     return P
