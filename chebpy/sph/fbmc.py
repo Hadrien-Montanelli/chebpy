@@ -39,17 +39,6 @@ def fbmc(F):
     
     # %% Step 2: enforce f_{j,k} = f_{-j,k} for even k.   
     
-    # # Exctract even modes in k and all modes in j (but exclude j=-n/2, 0):
-    # idx_k = 2*np.arange(int(n/2))
-    # idx_j = np.arange(1, int(n/2))
-    # idx_j = np.concatenate((idx_j, np.arange(int(n/2) + 1, n)))
-    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
-    # Feven = F[idx_j, idx_k]
-    
-    # # Matrices:
-    # I = np.eye(int(n/2)-1, n-2)
-    # A = I - np.fliplr(I)
-    
     # Exctract even modes in k and all modes in j, and enforce pole condition:
     idx_k = 2*np.arange(int(n/2))
     idx_j = np.arange(n)
