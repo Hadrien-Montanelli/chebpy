@@ -54,6 +54,20 @@ def fbmc(F):
     C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Feven)
     Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
     
+    # # Exctract even modes in k and all modes in j:
+    # idx_k = 2*np.arange(int(n/2))
+    # idx_j = np.arange(n)
+    # idx_k, idx_j = np.meshgrid(idx_k, idx_j)
+    # Feven = F[idx_j, idx_k]
+    
+    # # Matrices:
+    # I = np.eye(int(n/2)-1, n-2)
+    # A = I - np.fliplr(I)
+    
+    # # Minimum Frobenius-norm solution:
+    # C = A.T @ np.linalg.inv(A @ A.T) @ (A @ Feven)
+    # Fbmc[idx_j, idx_k] = F[idx_j, idx_k] - C
+    
     # %% Step 3: enforce Re(f_{j,k}) = -Re(f_{j,-k}) for odd k.   
     
     # Exctract odd modes in k and all modes in j:
@@ -105,16 +119,20 @@ def fbmc(F):
     
     # %% Step 6: enforce Im(f_{j,k}) = -Im(f_{j,-k}) for even k. 
     
-    # Exctract even modes in k (but exclude k=-n/2, 0) and all modes in j:
-    idx_k = 2*np.arange(1, int(n/4))
-    idx_k = np.concatenate((idx_k, 2*np.arange(int(n/4)+1, int(n/2))))
+    # Exctract even modes in k and all modes in j:
+    idx_k = 2*np.arange(int(n/2))
     idx_j = np.arange(n)
     idx_k, idx_j = np.meshgrid(idx_k, idx_j)
     Feven = np.imag(Fbmc[idx_j, idx_k])
     
     # Matrices:
-    I = np.eye(int(n/4)-1, int(n/2)-2)
-    B = I + np.fliplr(I)
+    I = np.eye(int(n/4)+1, int(n/2))
+    col = np.zeros(int(n/4)+1)
+    col[1] = 1
+    row = np.zeros(int(n/2))
+    J = toeplitz(col, row)
+    B = I + np.fliplr(J)
+    B[B==2] = 1
     
     # Minimum Frobenius-norm solution:
     C = (Feven @ B.T) @ np.linalg.inv(B @ B.T) @ B
