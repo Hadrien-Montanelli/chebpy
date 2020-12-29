@@ -20,7 +20,7 @@ f = lambda x: np.cos(10000*pi*x) + np.cos(5*pi*x)
 n = 100
 x = trigpts(n)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
-print('Error (1D):', np.max(np.abs(error)))
+print(f'Error (1D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (1D) on [0,2*pi].
 
@@ -28,7 +28,7 @@ f = lambda x: np.exp(np.cos(10*pi*x)**2)
 n = 120
 x = trigpts(n, [0, 2*pi])
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
-print('Error (1D):', np.max(np.abs(error)))
+print(f'Error (1D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (2D) on [-1,1]x[-1,1].
 
@@ -41,7 +41,7 @@ values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
 values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
-print('Error (2D):', np.max(np.abs(error)))
+print(f'Error (2D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (2D) on [-pi,pi]x[0,4*pi].
 
@@ -54,4 +54,4 @@ values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
 values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
-print('Error (2D):', np.max(np.abs(error)))
+print(f'Error (2D): {np.max(np.abs(error)):.2e}')

@@ -11,5 +11,6 @@ from .diffmat import diffmat
 from .feval import feval
 from .mean import mean
 from .multmat import multmat
+from .quadwts import quadwts
 from .spconvert import spconvert
 from .vals2coeffs import vals2coeffs

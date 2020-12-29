@@ -19,7 +19,7 @@ f = lambda x: np.exp(-10*x**2)
 n = 100
 x = chebpts(n)
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
-print('Error (1D):', np.max(np.abs(error)))
+print(f'Error (1D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (1D) on [0,2].
 
@@ -27,7 +27,7 @@ f = lambda x: np.exp(-10*x**2)
 n = 100
 x = chebpts(n, [0, 2])
 error = coeffs2vals(vals2coeffs(f(x))) - f(x)
-print('Error (1D):', np.max(np.abs(error)))
+print(f'Error (1D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (2D) on [-1,1]x[-1,1].
 
@@ -40,7 +40,7 @@ values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
 values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
-print('Error (2D):', np.max(np.abs(error)))
+print(f'Error (2D): {np.max(np.abs(error)):.2e}')
 
 # %% Transforms (2D) on [0,2]x[-1,0].
 
@@ -53,4 +53,4 @@ values = f(X, Y)
 coeffs = vals2coeffs(vals2coeffs(values).T).T
 values2 = coeffs2vals(coeffs2vals(coeffs).T).T
 error = values2 - values
-print('Error (2D):', np.max(np.abs(error)))
+print(f'Error (2D): {np.max(np.abs(error)):.2e}')

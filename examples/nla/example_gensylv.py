@@ -27,4 +27,4 @@ E = 0.1*np.random.randn(m, n)
 # Solve and compute error:
 X = gensylv(A, B, C, D, E)
 error = np.linalg.norm(A @ X @ B.T + C @ X @ D.T - E)
-print('Error:', error)
+print(f'Error: {error:.2e}')
