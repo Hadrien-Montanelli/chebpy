@@ -15,4 +15,5 @@ def quadwts(n, dom=[-1, 1]):
     w = np.real(np.fft.ifft(c))
     w[0] = w[0]/2
     w = np.concatenate((w, [w[0]]), axis=0)
+    w = (dom[1] - dom[0])/2*w
     return w

@@ -19,14 +19,32 @@ from chebpy.cheb import chebpts, quadwts
 f = lambda x: np.exp(x)
 
 # Grid and weights:
-n = 20
+n = 12
 x = chebpts(n)
 w = quadwts(n)
 
 # Compute integral with quadrature:
-I = np.sum(w*f(x))
+I = w @ f(x)
 
 # Compute error:
 Iex = np.exp(1) - np.exp(-1)
+error = np.abs(I - Iex)
+print(f'Error: {error:.2e}')
+
+# %% Integrate f(x) = exp(x) on [0,2].
+
+# Function:
+f = lambda x: np.exp(x)
+
+# Grid and weights:
+n = 12
+x = chebpts(n, [0, 2])
+w = quadwts(n, [0, 2])
+
+# Compute integral with quadrature:
+I = w @ f(x)
+
+# Compute error:
+Iex = np.exp(2) - np.exp(0)
 error = np.abs(I - Iex)
 print(f'Error: {error:.2e}')

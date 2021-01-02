@@ -59,13 +59,13 @@ F = S1 @ S0 @ F
 F[-2] = c
 F[-1] = d
 end = time.time()
-print(f'Time  (setup):  {end-start:.5f}s')
+print(f'Time  (setup): {end-start:.5f}s')
 
 # Sparse solve:
 start = time.time()
 U = spsolve(L, F)
 end = time.time()
-print(f'Time  (solve):  {end-start:.5f}s')
+print(f'Time  (solve): {end-start:.5f}s')
 
 # Plot solution and compute error:
 u = coeffs2vals(U)
