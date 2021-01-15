@@ -10,5 +10,6 @@ from .diffmat import diffmat
 from .feval import feval
 from .mean import mean
 from .multmat import multmat
+from .quadwts import quadwts
 from .trigpts import trigpts
 from .vals2coeffs import vals2coeffs

@@ -29,4 +29,4 @@ vals = feval(F, xx)
 
 # Error:
 error = np.max(np.abs(vals - f(xx)))/np.max(np.abs(f(xx)))
-print('Error:', error)
+print(f'Error: {error:.2e}')
