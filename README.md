@@ -30,7 +30,7 @@ Don't forget to `souce ~/.bash_profile` when you're done.
 
 I recommend taking a look at the **examples** folder.
 
-Any comment or question, send an email to: hadrien.montanelli@gmail.com
-
 # License
 See `LICENSE.txt` for licensing information.
+
+Any comment or question, send an email to: hadrien.montanelli@gmail.com
