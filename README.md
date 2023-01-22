@@ -28,7 +28,7 @@ Don't forget to `souce ~/.bash_profile` when you're done.
 
 # Getting started 
 
-I recommend taking a look at the **examples** folder.
+Check out the examples folder.
 
 # License
 See `LICENSE.txt` for licensing information.
